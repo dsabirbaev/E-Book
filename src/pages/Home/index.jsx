@@ -1,13 +1,11 @@
 
-
+import Intro from "../../components/Intro";
 import "./style.scss"
 
 const index = () => {
     return (
         <section>
-            <div className="container">
-                <h1>Home</h1>
-            </div>
+            <Intro/>
         </section>
     );
 };
