@@ -12,9 +12,11 @@ const Layout = () => {
         <header>
             <Header/>
         </header>
+
         <main>
             <Outlet/>
         </main>
+        
         <footer>
             <Footer/>
         </footer>

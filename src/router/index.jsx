@@ -13,33 +13,104 @@ import Forum from "../pages/Forum";
 
 import NotFound from "../pages/NotFound";
 
+
+import SingUp from "../pages/Auth/SignUp";
+import SingIn from "../pages/Auth/SignIn";
+
+import Profile from "../pages/Profile";
+
+import SettingPage from "../pages/Setting";
+import MyAccount from "../pages/Setting/MyAccount";
+import Security from "../pages/Setting/Security";
+import Setting from "../pages/Setting/Setting";
+
+import Dashboard from "../pages/Dashboard";
+
+import Author from "../pages/Author";
+import Books from "../pages/Books";
+import AuthorDetails from "../pages/Details/AuthorDetails";
+import BookDetails from "../pages/Details/BookDetails";
+
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Layout/>,
+        element: <Layout />,
         errorElement: <NotFound />,
         children: [
             {
                 path: "/",
-                element: <Home/>
+                element: <Home />
+            },
+            {
+                path: "/auhtor",
+                element: <Author />
+            },
+            {
+                path: "/books",
+                element: <Books />
+            },
+            {
+                path: "/auhtor/:id",
+                element: <AuthorDetails />
+            },
+            {
+                path: "/books/:id",
+                element: <BookDetails />
             },
             {
                 path: "/nasr",
-                element: <Nasr/>
+                element: <Nasr />
             },
             {
                 path: "/nazm",
-                element: <Nazm/>
+                element: <Nazm />
             },
             {
                 path: "/maqolalar",
-                element: <Maqolalar/>
+                element: <Maqolalar />
             },
             {
                 path: "/forum",
-                element: <Forum/>
+                element: <Forum />
+            },
+            {
+                path: "/profile",
+                element: <Profile />
+            }
+
+        ]
+    },
+    {
+        path: "/settings",
+        element: <SettingPage />,
+        children: [
+            {
+                path: "my-account",
+                element: <MyAccount />
+            },
+            {
+                path: "security",
+                element: <Security />
+            },
+            {
+                path: "setting",
+                element: <Setting />
             }
         ]
+    },
+
+    {
+        path: "/dashboard",
+        element: <Dashboard />
+    },
+
+    {
+        path: "/signup",
+        element: <SingUp />
+    },
+    {
+        path: "/signin",
+        element: <SingIn />
     }
 ]);
 
