@@ -1,12 +1,14 @@
 
-
+import IntroCarousel from "../UI/Carousel/IntroCarousel";
 import "./style.scss";
 
 const index = () => {
     return (
-        <section>
+        <section className="pt-[54px]">
             <div className='container'>
-                <h2>Intro</h2>
+                <div className="wrapper">
+                    <IntroCarousel />
+                </div>
             </div>
         </section>
     );
