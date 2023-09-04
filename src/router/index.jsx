@@ -66,7 +66,7 @@ const router = createBrowserRouter([
                 element: <Nazm />
             },
             {
-                path: "/maqolalar",
+                path: "/maqola",
                 element: <Maqolalar />
             },
             {

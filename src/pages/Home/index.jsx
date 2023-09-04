@@ -4,9 +4,10 @@ import "./style.scss"
 
 const index = () => {
     return (
-        <section>
+        <div>
             <Intro/>
-        </section>
+            home
+        </div>
     );
 };
 

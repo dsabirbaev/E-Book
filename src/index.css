@@ -9,6 +9,22 @@
   scroll-behavior: smooth;
 }
 
+
+@font-face {
+  font-family: Rotter;
+  src: url(./assets/fonts/Rotter.otf);
+}
+
+@font-face {
+  font-family: SteinbeckRegular;
+  src: url(./assets/fonts/Steinbeck.otf);
+}
+
+@font-face {
+  font-family: HelveticaNeueCyrLight;
+  src: url(./assets/fonts/HelveticaNeueCyr-Light.ttf);
+}
+
 a {
   text-decoration: none;
 }
@@ -17,11 +33,14 @@ ul {
 }
 
 body {
-  font-family: sans-serif;
+  font-family: SteinbeckRegular;
 }
 
 .container{
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 10px;
 }
+
+
