@@ -3,9 +3,11 @@ import "./style.scss";
 
 const index = () => {
     return (
-        <footer>
+        <footer className="py-5 bg-slate-600">
             <div className="container">
-                <h1>Footer</h1>
+                <div className="text-center text-white text-[18px]">
+                    2023 - {new Date().getFullYear()} &copy;
+                </div>
             </div>
         </footer>
     );

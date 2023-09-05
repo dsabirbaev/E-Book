@@ -25,6 +25,11 @@
   src: url(./assets/fonts/HelveticaNeueCyr-Light.ttf);
 }
 
+@font-face {
+  font-family: Visuelt;
+  src: url(./assets/fonts/Visuelt.ttf);
+}
+
 a {
   text-decoration: none;
 }
