@@ -103,7 +103,7 @@ const SignUp = () => (
                         },
                     ]}
                 >
-                    <Input.Password className='py-2 outline-none mt-4' placeholder="Parol" />
+                    <Input.Password className='py-2 outline-none' placeholder="Parol" />
                 </Form.Item>
 
                 <Form.Item

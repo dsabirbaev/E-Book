@@ -1,8 +1,9 @@
 
 import { useEffect } from "react";
-import { Outlet, useNavigate, NavLink } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import "./style.scss";
-
+import SettingHeader from "./SettingHeader";
+import { Button } from "antd";
 const index = () => {
     const navigate = useNavigate();
     useEffect(() => {
@@ -10,24 +11,15 @@ const index = () => {
     }, [])
     return (
         <div>
-            <header className="bg-[#E5E5E5]">
-                <div className="container">
-                   
-                        <ul className="flex">
-                            <li className="w-1/4 mx-1">
-                                <NavLink to="/settings/my-account" className="p-5 block mx-[5px] mt-[5px] w-full bg-[#F3F6F9]">Profile</NavLink>
-                            </li>
-                            <li className="w-1/4 mx-1">
-                                <NavLink to="/settings/security" className="p-5 block mx-[5px] mt-[5px] w-full bg-[#F3F6F9]">Xafsizlik</NavLink>
-                            </li>
-                            <li className="w-1/4 mx-1">
-                                <NavLink to="/settings/setting" className="p-5 block mx-[5px] mt-[5px] w-full bg-[#F3F6F9]">Sozlamalar</NavLink>
-                            </li>
-                        </ul>
-                   
-                </div>
-            </header>
+            <SettingHeader />
             <Outlet />
+
+            <div className="container">
+                <Link to="/">
+                    <Button className="mt-12 mb-5">Bosh sahifa</Button>
+                </Link>
+
+            </div>
         </div>
     );
 };
