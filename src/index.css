@@ -30,6 +30,11 @@
   src: url(./assets/fonts/Visuelt.ttf);
 }
 
+@font-face {
+  font-family: ArialBlack;
+  src: url(./assets/fonts/arial_black.ttf);
+}
+
 a {
   text-decoration: none;
 }
