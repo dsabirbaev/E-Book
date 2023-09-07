@@ -73,8 +73,8 @@ const index = () => {
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Davlati"
                             />
-                            <Select className="py-3  mb-3 " id="countries" required>
-                                <option disabled selected>
+                            <Select className="py-3  mb-3 " id="countries" required defaultValue={'DEFAULT'}>
+                                <option disabled value="DEFAULT">
                                     Kitob muallifini tanglang
                                 </option>
                                 <option>Canada</option>
