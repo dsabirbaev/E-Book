@@ -1,12 +1,27 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Dropdown } from 'flowbite-react';
-
+import { ToastContainer, toast } from 'react-toastify';
+import { useState } from "react";
 import "./style.scss";
 
 const index = () => {
+    const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token") || false);
+    const logOut = () => {
+
+        if (localStorage.getItem("token")) {
+            toast.info("Logout!");
+            localStorage.clear();
+        } else {
+            setIsLoggedIn(false);
+        }
+        navigate("/signin");
+
+    }
     return (
         <header className="border-b-2">
             <div className="container">
+                <ToastContainer />
                 <nav className="flex items-center justify-between h-[80px]">
 
                     <Link to="/">
@@ -44,20 +59,45 @@ const index = () => {
 
 
                         <Dropdown label="menu">
-                            <ul>
-                                <li>
-                                    <Link to="/profile" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Profile </Link>
-                                </li>
-                                <li>
-                                    <Link to="/dashboard" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Maydon </Link>
-                                </li>
-                                <li>
-                                    <Link to="/settings" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Sozlamalar </Link>
-                                </li>
-                                <li>
-                                    <Link to="/signin" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Chiqish </Link>
-                                </li>
-                            </ul>
+                            {
+                                isLoggedIn ?
+                                    (
+                                        <ul>
+                                            <li>
+                                                <Link to="/profile" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Profile </Link>
+                                            </li>
+                                            <li>
+                                                <Link to="/dashboard" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Maydon </Link>
+                                            </li>
+                                            <li>
+                                                <Link to="/settings" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Sozlamalar </Link>
+                                            </li>
+                                            <li>
+                                                <span onClick={() => logOut()} className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block">
+                                                    {
+                                                        isLoggedIn ? "Chiqish" : "Kirish"
+                                                    }
+
+                                                </span>
+                                            </li>
+
+                                        </ul>
+                                    ) :
+                                    (
+                                        <ul>
+                                            <li>
+                                                <span onClick={() => logOut()} className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block">
+                                                    {
+                                                        isLoggedIn ? "Chiqish" : "Kirish"
+                                                    }
+
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    )
+                            }
+
+
                         </Dropdown>
                     </div>
 

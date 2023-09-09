@@ -10,7 +10,7 @@ const index = () => {
             <Intro/>
             <SearchPanel/>
             <Category/>
-            Home
+           
         </div>
     );
 };
