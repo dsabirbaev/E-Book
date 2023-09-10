@@ -7,6 +7,7 @@ import "./style.scss";
 const index = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token") || false);
+    const [userName, setUserName] = useState(JSON.parse(localStorage.getItem("user") || "CABINET" ));
     const logOut = () => {
 
         if (localStorage.getItem("token")) {
