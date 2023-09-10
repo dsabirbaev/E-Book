@@ -11,12 +11,15 @@ const SignIn = () => {
     const navigate = useNavigate();
 
     const onFinish = (values) => {
-        console.log('Success:', values);
+       
         const user = {email: values.username, password: values.password};
+
         useAuth.login(user).then((res) => {
-            console.log(res)
-            localStorage.setItem("token", res.data.token);
-            if(res.data.status === 200 && localStorage.getItem("token")){
+          
+            localStorage.setItem("token", Date.now());
+            localStorage.setItem("user", JSON.stringify(res.data.user));
+
+            if(res.status === 200 && localStorage.getItem("token")){
                 navigate("/");
             }
             toast.success("Success!")

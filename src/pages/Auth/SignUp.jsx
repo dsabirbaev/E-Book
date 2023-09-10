@@ -12,9 +12,17 @@ const SignUp = () => {
     const navigate = useNavigate();
 
     const onFinish = (values) => {
-        console.log('Success:', values);
+        
+        const newUser = {
+            first_name: values.firstName,
+            last_name: values.lastName,
+            phone: values.phone,
+            password: values.password,
+            email: values.email,
+            user_photo: "avatar.png"
+        };
 
-        useAuth.register(values).then((res) => {
+        useAuth.register(newUser).then((res) => {
             console.log(res);
             if (res.data.status === 200) {
                 
