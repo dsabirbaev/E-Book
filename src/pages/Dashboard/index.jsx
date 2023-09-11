@@ -1,26 +1,29 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import { Modal, Input } from "antd";
 import { Button, Tabs, Table, Select, Textarea } from "flowbite-react";
 import UploadImage from "./../../components/UI/Upload/Upload";
 import { Link } from "react-router-dom";
 import useCountry from "../../service/country/useCountry";
-
+import { ToastContainer, toast } from 'react-toastify';
+import "./style.scss";
 
 const index = () => {
     const onChange = (key) => {
         console.log(key);
     };
 
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [isModalOpen2, setIsModalOpen2] = useState(false);
-    // const [isModalOpen3, setIsModalOpen3] = useState(false);
 
     const initState = {
         modal1: false,
         modal2: false,
-        modal3: false
+        modal3: false,
+        countryName: "",
+        countryIcon: "",
+        countryList: [],
+        countryLoad: false
     }
 
+    const [btnDisable, btnEnable] = useState(false);
     const reducer = (state, action) => {
         switch (action.type) {
             case "MODAL1":
@@ -29,25 +32,80 @@ const index = () => {
                 return { ...state, modal2: !state.modal2 };
             case "MODAL3":
                 return { ...state, modal3: !state.modal3 };
+            case "SETCOUNTRY_NAME":
+                return { ...state, countryName: action.payload };
+            case "SETCOUNTRY_ICON":
+                return { ...state, countryIcon: action.payload };
+            case "SET_COUNTRY":
+                return { ...state, countryList: action.payload };
+            case "SET_COUNTRY_LOAD":
+                return { ...state, countryLoad: true };
+            case "CLEAR_COUNTRY_INPUT":
+                return { ...state, countryName: " ", countryIcon: " " };
             default:
-                return state;    
+                return state;
         }
     }
 
-    const [{modal1, modal2, modal3}, dispatch] = useReducer(reducer, initState);
+    const [{ modal1, modal2, modal3, countryName, countryIcon, countryList, countryLoad }, dispatch] = useReducer(reducer, initState);
 
-  
+    const addNewCountry = () => {
+        btnEnable(true);
+        const newCountry = {
+            name: countryName,
+            icon: countryIcon
+        }
+
+        if (newCountry.name.trim().length === 0 || newCountry.icon.trim().length === 0) {
+            toast.warn("Maydonlarni to'ldiring!");
+        } else {
+            useCountry.createCountry(newCountry).then((res) => {
+
+                if (res.status === 201) {
+                    getCountry();
+                    toast.success("Davlat qo'shildi!");
+                    dispatch({ type: "MODAL1" });
+                    dispatch({ type: "CLEAR_COUNTRY_INPUT" });
+                    btnEnable(false);
+                }
+            }).catch((err) => {
+                console.log(err.message)
+            })
+        }
+    }
+
+    const getCountry = () => {
+        useCountry.getCountry().then((res) => {
+            dispatch({ type: "SET_COUNTRY", payload: res.data })
+            dispatch({ type: "SET_COUNTRY_LOAD" })
+        })
+    }
+
+    const deleteCountry = (id) => {
+        useCountry.deleteCountry(id).then((res) => {
+            getCountry()
+            toast.success("Davlat o'chirildi!")
+        })
+    }
+    useEffect(() => {
+        getCountry()
+    }, [])
+
+    // if(countryLoad){
+    //     return <h1 className="text-2xl">Loading . . .</h1>
+    // }
     return (
         <section>
             <div className="container">
+                <ToastContainer />
                 {/* Book modal */}
                 <Modal
                     okText="Saqlash"
                     cancelText="Bekor qilish"
                     title="Kitob qushish"
                     open={modal3}
-                    onOk={() => dispatch({type: "MODAL3"})}
-                    onCancel={() => dispatch({type: "MODAL3"})}
+                    onOk={() => dispatch({ type: "MODAL3" })}
+                    onCancel={() => dispatch({ type: "MODAL3" })}
                     width={"1000px"}
                 >
                     <div className="flex">
@@ -105,8 +163,8 @@ const index = () => {
                     cancelText="Bekor qilish"
                     title="Muallif qushish"
                     open={modal2}
-                    onOk={() => dispatch({type: "MODAL2"})}
-                    onCancel={() => dispatch({type: "MODAL2"})}
+                    onOk={() => dispatch({ type: "MODAL2" })}
+                    onCancel={() => dispatch({ type: "MODAL2" })}
                     width={"1000px"}
                 >
                     <div className="flex">
@@ -171,9 +229,10 @@ const index = () => {
                     cancelText="Bekor qilish"
                     title="Davlat qushish"
                     open={modal1}
-                    onOk={() => dispatch({type: "MODAL1"})}
-                    onCancel={() => dispatch({type: "MODAL1"})}
+                    onOk={() => addNewCountry()}
+                    onCancel={() => dispatch({ type: "MODAL1" })}
                     width={"1000px"}
+                    okButtonProps={{disabled: btnDisable}}
                 >
                     <div className="flex">
 
@@ -185,6 +244,8 @@ const index = () => {
                                     type="text"
                                     className=" rounded-lg py-3 mb-3"
                                     placeholder="Davlat nomini yozing"
+                                    value={countryName}
+                                    onChange={(e) => dispatch({ type: "SETCOUNTRY_NAME", payload: e.target.value })}
                                 />
                             </label>
                             <label htmlFor="lastname">
@@ -194,6 +255,8 @@ const index = () => {
                                     type="text"
                                     className=" rounded-lg py-3 mb-3"
                                     placeholder="Bayroq linki: "
+                                    value={countryIcon}
+                                    onChange={(e) => dispatch({ type: "SETCOUNTRY_ICON", payload: e.target.value })}
                                 />
                             </label>
                         </div>
@@ -209,13 +272,13 @@ const index = () => {
                         <span> Umimiy baza</span>
                     </div>
                     <div className="flex gap-x-2 font-mono">
-                        <Button gradientMonochrome="info" onClick={() => dispatch({type: "MODAL1"})}>
+                        <Button gradientMonochrome="info" onClick={() => dispatch({ type: "MODAL1" })}>
                             DAvlat qushish
                         </Button>
-                        <Button gradientMonochrome="purple" onClick={() => dispatch({type: "MODAL2"})}>
+                        <Button gradientMonochrome="purple" onClick={() => dispatch({ type: "MODAL2" })}>
                             Muallif qushish
                         </Button>
-                        <Button gradientMonochrome="success" onClick={() => dispatch({type: "MODAL3"})}>
+                        <Button gradientMonochrome="success" onClick={() => dispatch({ type: "MODAL3" })}>
                             Kitob qushish
                         </Button>
 
@@ -224,6 +287,38 @@ const index = () => {
 
                 <div className="mt-4 font-mono">
                     <Tabs.Group aria-label="Default tabs" style="default">
+                        <Tabs.Item title="Davlatlar">
+                            <Table hoverable>
+                                <Table.Head>
+                                    <Table.HeadCell>Nomi</Table.HeadCell>
+                                    <Table.HeadCell>Belgisi</Table.HeadCell>
+                                    <Table.HeadCell>O'chirish</Table.HeadCell>
+                                    <Table.HeadCell>Tahrirlash</Table.HeadCell>
+                                </Table.Head>
+                                <Table.Body className="divide-y">
+
+                                    {
+                                        countryList.length ? countryList.map((item) => {
+                                            return <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                    {item?.name}
+                                                </Table.Cell>
+                                                <Table.Cell>{item?.icon}</Table.Cell>
+                                                <Table.Cell>
+                                                    <Button onClick={() => deleteCountry(item.id)} gradientMonochrome="failure">O'chirish </Button>
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <p className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                                                        Tahrirlash
+                                                    </p>
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        }) : null
+                                    }
+
+                                </Table.Body>
+                            </Table>
+                        </Tabs.Item>
                         <Tabs.Item title="Kitoblar">
                             <Table hoverable>
                                 <Table.Head>
