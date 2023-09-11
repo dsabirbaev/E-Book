@@ -23,7 +23,7 @@ const BookDetails = () => {
 
                             <div className="flex  w-full items-center mb-[48px]">
                                 <p className="text-[#C9AC8C] text-[16px] w-[150px]">To’liq ma’lumot</p>
-                                <i class='bx bx-down-arrow-alt tetx-[15px] mx-1'></i>
+                                <i className='bx bx-down-arrow-alt tetx-[15px] mx-1'></i>
                                 <span className="h-[1px] bg-black w-full block"></span>
                             </div>
 
@@ -35,17 +35,17 @@ const BookDetails = () => {
                             <div className="flex justify-between items-center">
                                 <div className="flex gap-x-[26px]">
                                     <div className="flex flex-col items-center">
-                                        <i class='bx bxs-book-alt text-[22px]'></i>
+                                        <i className='bx bxs-book-alt text-[22px]'></i>
                                         <p className="text-[16px]">Qog’oz kitob</p>
                                         <span className="text-[16px] text-gray-300">27 000 so’m</span>
                                     </div>
                                     <div className="flex flex-col items-center">
-                                        <i class='bx bx-headphone text-[22px]'></i>
+                                        <i className='bx bx-headphone text-[22px]'></i>
                                         <p className="text-[16px]">Audiokitob</p>
                                         <span className="text-[16px] text-gray-300">6:23 soat</span>
                                     </div>
                                     <div className="flex flex-col items-center">
-                                        <i class='bx bxs-book text-[22px]'></i>
+                                        <i className='bx bxs-book text-[22px]'></i>
                                         <p className="text-[16px]">Elektron</p>
                                         <span className="text-[16px] text-gray-300">pdf, epub</span>
                                     </div>
