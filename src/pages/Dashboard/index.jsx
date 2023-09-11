@@ -1,46 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { Modal, Input } from "antd";
 import { Button, Tabs, Table, Select, Textarea } from "flowbite-react";
 import UploadImage from "./../../components/UI/Upload/Upload";
 import { Link } from "react-router-dom";
+import useCountry from "../../service/country/useCountry";
+
 
 const index = () => {
     const onChange = (key) => {
         console.log(key);
     };
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalOpen2, setIsModalOpen2] = useState(false);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [isModalOpen2, setIsModalOpen2] = useState(false);
+    // const [isModalOpen3, setIsModalOpen3] = useState(false);
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+    const initState = {
+        modal1: false,
+        modal2: false,
+        modal3: false
+    }
 
-    const showModal2 = () => {
-        setIsModalOpen2(true);
-    };
-    const handleOk2 = () => {
-        setIsModalOpen2(false);
-    };
-    const handleCancel2 = () => {
-        setIsModalOpen2(false);
-    };
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case "MODAL1":
+                return { ...state, modal1: !state.modal1 };
+            case "MODAL2":
+                return { ...state, modal2: !state.modal2 };
+            case "MODAL3":
+                return { ...state, modal3: !state.modal3 };
+            default:
+                return state;    
+        }
+    }
+
+    const [{modal1, modal2, modal3}, dispatch] = useReducer(reducer, initState);
+
+  
     return (
         <section>
             <div className="container">
+                {/* Book modal */}
                 <Modal
                     okText="Saqlash"
                     cancelText="Bekor qilish"
                     title="Kitob qushish"
-                    open={isModalOpen}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
+                    open={modal3}
+                    onOk={() => dispatch({type: "MODAL3"})}
+                    onCancel={() => dispatch({type: "MODAL3"})}
                     width={"1000px"}
                 >
                     <div className="flex">
@@ -92,13 +99,14 @@ const index = () => {
                     </div>
                 </Modal>
 
+                {/* Author modal */}
                 <Modal
                     okText="Saqlash"
                     cancelText="Bekor qilish"
                     title="Muallif qushish"
-                    open={isModalOpen2}
-                    onOk={handleOk2}
-                    onCancel={handleCancel2}
+                    open={modal2}
+                    onOk={() => dispatch({type: "MODAL2"})}
+                    onCancel={() => dispatch({type: "MODAL2"})}
                     width={"1000px"}
                 >
                     <div className="flex">
@@ -156,6 +164,43 @@ const index = () => {
                         </div>
                     </div>
                 </Modal>
+
+                {/* Country modal */}
+                <Modal
+                    okText="Saqlash"
+                    cancelText="Bekor qilish"
+                    title="Davlat qushish"
+                    open={modal1}
+                    onOk={() => dispatch({type: "MODAL1"})}
+                    onCancel={() => dispatch({type: "MODAL1"})}
+                    width={"1000px"}
+                >
+                    <div className="flex">
+
+                        <div className="p-5 grow">
+                            <label htmlFor="name">
+                                <p>Davlat nomi:</p>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    className=" rounded-lg py-3 mb-3"
+                                    placeholder="Davlat nomini yozing"
+                                />
+                            </label>
+                            <label htmlFor="lastname">
+                                <p>Icon:</p>
+                                <Input
+                                    id="lastname"
+                                    type="text"
+                                    className=" rounded-lg py-3 mb-3"
+                                    placeholder="Bayroq linki: "
+                                />
+                            </label>
+                        </div>
+                    </div>
+                </Modal>
+
+
                 <div className="flex justify-between py-8 border-b-2">
                     <div className="text-xl font-sans flex items-center gap-x-4 ">
                         <Link to="/">
@@ -164,12 +209,16 @@ const index = () => {
                         <span> Umimiy baza</span>
                     </div>
                     <div className="flex gap-x-2 font-mono">
-                        <Button gradientMonochrome="success" onClick={showModal}>
-                            Kitob qushish
+                        <Button gradientMonochrome="info" onClick={() => dispatch({type: "MODAL1"})}>
+                            DAvlat qushish
                         </Button>
-                        <Button gradientMonochrome="purple" onClick={showModal2}>
+                        <Button gradientMonochrome="purple" onClick={() => dispatch({type: "MODAL2"})}>
                             Muallif qushish
                         </Button>
+                        <Button gradientMonochrome="success" onClick={() => dispatch({type: "MODAL3"})}>
+                            Kitob qushish
+                        </Button>
+
                     </div>
                 </div>
 
