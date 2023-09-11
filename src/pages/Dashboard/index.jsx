@@ -1,16 +1,18 @@
 import React, { useState, useReducer, useEffect } from "react";
-import { Modal, Input } from "antd";
-import { Button, Tabs, Table, Select, Textarea } from "flowbite-react";
+import { Modal, Input, Select } from "antd";
+import { Button, Tabs, Table, Textarea } from "flowbite-react";
 import UploadImage from "./../../components/UI/Upload/Upload";
 import { Link } from "react-router-dom";
 import useCountry from "../../service/country/useCountry";
 import { ToastContainer, toast } from 'react-toastify';
 import "./style.scss";
 
+
+const onChange = (key) => {
+    console.log(key);
+};
 const index = () => {
-    const onChange = (key) => {
-        console.log(key);
-    };
+    
 
 
     const initState = {
@@ -87,6 +89,19 @@ const index = () => {
             toast.success("Davlat o'chirildi!")
         })
     }
+
+    const onChange = (value) => {
+        console.log(`selected ${value}`);
+    };
+
+    const onSearch = (value) => {
+        console.log('search:', value);
+    };
+
+    const filterOption = (input, option) =>
+        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+
     useEffect(() => {
         getCountry()
     }, [])
@@ -210,11 +225,20 @@ const index = () => {
                             </label>
                             <label htmlFor="country">
                                 <p>Davlati</p>
-                                <Input
-                                    id="country"
-                                    type="date"
-                                    className=" rounded-lg py-3 mb-3"
-                                    placeholder="Davlati"
+                                <Select
+                                    className="w-full my-8"
+                                    showSearch
+                                    placeholder="Select a person"
+                                    optionFilterProp="children"
+                                    onChange={onChange}
+                                    onSearch={onSearch}
+                                    filterOption={filterOption}
+                                    options={countryList?.map((item) => {
+                                        return {
+                                            label: item.name,
+                                            value: item.name,
+                                        };
+                                    })}
                                 />
                             </label>
 
@@ -232,7 +256,7 @@ const index = () => {
                     onOk={() => addNewCountry()}
                     onCancel={() => dispatch({ type: "MODAL1" })}
                     width={"1000px"}
-                    okButtonProps={{disabled: btnDisable}}
+                    okButtonProps={{ disabled: btnDisable }}
                 >
                     <div className="flex">
 
@@ -319,6 +343,37 @@ const index = () => {
                                 </Table.Body>
                             </Table>
                         </Tabs.Item>
+                        <Tabs.Item title="Mualliflar">
+                            <Table hoverable>
+                                <Table.Head>
+                                    <Table.HeadCell>Muallif</Table.HeadCell>
+                                    <Table.HeadCell>Kitoblari soni</Table.HeadCell>
+                                    <Table.HeadCell>Tuguligan sanasi</Table.HeadCell>
+                                    <Table.HeadCell>BIO</Table.HeadCell>
+                                    <Table.HeadCell>
+                                        <span className="sr-only">Edit</span>
+                                    </Table.HeadCell>
+                                </Table.Head>
+                                <Table.Body className="divide-y">
+                                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                            Apple MacBook Pro 17"
+                                        </Table.Cell>
+                                        <Table.Cell>Sliver</Table.Cell>
+                                        <Table.Cell>Laptop</Table.Cell>
+                                        <Table.Cell>$2999</Table.Cell>
+                                        <Table.Cell>
+                                            <a
+                                                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                                                href="/tables"
+                                            >
+                                                <p>Batafsil</p>
+                                            </a>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                </Table.Body>
+                            </Table>
+                        </Tabs.Item>
                         <Tabs.Item title="Kitoblar">
                             <Table hoverable>
                                 <Table.Head>
@@ -352,37 +407,7 @@ const index = () => {
                                 </Table.Body>
                             </Table>
                         </Tabs.Item>
-                        <Tabs.Item title="Mualliflar">
-                            <Table hoverable>
-                                <Table.Head>
-                                    <Table.HeadCell>Muallif</Table.HeadCell>
-                                    <Table.HeadCell>Kitoblari soni</Table.HeadCell>
-                                    <Table.HeadCell>Tuguligan sanasi</Table.HeadCell>
-                                    <Table.HeadCell>BIO</Table.HeadCell>
-                                    <Table.HeadCell>
-                                        <span className="sr-only">Edit</span>
-                                    </Table.HeadCell>
-                                </Table.Head>
-                                <Table.Body className="divide-y">
-                                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                            Apple MacBook Pro 17"
-                                        </Table.Cell>
-                                        <Table.Cell>Sliver</Table.Cell>
-                                        <Table.Cell>Laptop</Table.Cell>
-                                        <Table.Cell>$2999</Table.Cell>
-                                        <Table.Cell>
-                                            <a
-                                                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                                                href="/tables"
-                                            >
-                                                <p>Batafsil</p>
-                                            </a>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                </Table.Body>
-                            </Table>
-                        </Tabs.Item>
+
                     </Tabs.Group>
                 </div>
             </div>
