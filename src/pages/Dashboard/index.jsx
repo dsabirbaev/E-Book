@@ -1,11 +1,13 @@
 import React, { useState, useReducer, useEffect } from "react";
-import { Modal, Input, Select } from "antd";
-import { Button, Tabs, Table, Textarea } from "flowbite-react";
-import UploadImage from "./../../components/UI/Upload/Upload";
+import { Modal, Input} from "antd";
+import { Button, Tabs, Table } from "flowbite-react";
+
 import { Link } from "react-router-dom";
 import useCountry from "../../service/country/useCountry";
 import { ToastContainer, toast } from 'react-toastify';
 import "./style.scss";
+import AuthorModal from "./AuthorModal";
+import BookModal from "./BookModal";
 
 
 const onChange = (key) => {
@@ -26,6 +28,7 @@ const index = () => {
     }
 
     const [btnDisable, btnEnable] = useState(false);
+
     const reducer = (state, action) => {
         switch (action.type) {
             case "MODAL1":
@@ -53,6 +56,7 @@ const index = () => {
 
     const addNewCountry = () => {
         btnEnable(true);
+
         const newCountry = {
             name: countryName,
             icon: countryIcon
@@ -86,21 +90,18 @@ const index = () => {
     const deleteCountry = (id) => {
         useCountry.deleteCountry(id).then((res) => {
             getCountry()
-            toast.success("Davlat o'chirildi!")
+            toast.success("Davlat o'chirildi!", { autoClose: 1000})
         })
     }
 
-    const onChange = (value) => {
-        console.log(`selected ${value}`);
-    };
+    const  SHOW_MODAL_2 = () => {
+        dispatch({ type: "MODAL2" });
+    }
 
-    const onSearch = (value) => {
-        console.log('search:', value);
-    };
-
-    const filterOption = (input, option) =>
-        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-
+    const  SHOW_MODAL_3 = () => {
+        dispatch({ type: "MODAL3" });
+    }
+ 
 
     useEffect(() => {
         getCountry()
@@ -113,139 +114,10 @@ const index = () => {
         <section>
             <div className="container">
                 <ToastContainer />
-                {/* Book modal */}
-                <Modal
-                    okText="Saqlash"
-                    cancelText="Bekor qilish"
-                    title="Kitob qushish"
-                    open={modal3}
-                    onOk={() => dispatch({ type: "MODAL3" })}
-                    onCancel={() => dispatch({ type: "MODAL3" })}
-                    width={"1000px"}
-                >
-                    <div className="flex">
-                        <div className="p-5 w-[400px]">
-                            <UploadImage />
-                        </div>
-                        <div className="p-5 grow">
-                            <Input
-                                type="text"
-                                className=" rounded-lg py-3 mb-3"
-                                placeholder="Kitob nomi"
-                            />
-                            <Input
-                                type="number"
-                                className=" rounded-lg py-3 mb-3"
-                                placeholder="Sahifalar soni"
-                            />
-                            <Input
-                                type="date"
-                                className=" rounded-lg py-3 mb-3"
-                                placeholder="Yili"
-                            />
-                            <Input
-                                type="number"
-                                className=" rounded-lg py-3 mb-3"
-                                placeholder="Kitob narhi"
-                            />
-                            <Input
-                                type="text"
-                                className=" rounded-lg py-3 mb-3"
-                                placeholder="Davlati"
-                            />
-                            <Select className="py-3  mb-3 " id="countries" required defaultValue={'DEFAULT'}>
-                                <option disabled value="DEFAULT">
-                                    Kitob muallifini tanglang
-                                </option>
-                                <option>Canada</option>
-                                <option>France</option>
-                                <option>Germany</option>
-                            </Select>
+               
+                <AuthorModal modal2={modal2} countryList={countryList} modal={SHOW_MODAL_2}/>
 
-                            <Textarea
-                                id="comment"
-                                placeholder="Tasnifini yozing"
-                                required
-                                rows={4}
-                            />
-                        </div>
-                    </div>
-                </Modal>
-
-                {/* Author modal */}
-                <Modal
-                    okText="Saqlash"
-                    cancelText="Bekor qilish"
-                    title="Muallif qushish"
-                    open={modal2}
-                    onOk={() => dispatch({ type: "MODAL2" })}
-                    onCancel={() => dispatch({ type: "MODAL2" })}
-                    width={"1000px"}
-                >
-                    <div className="flex">
-                        <div className="p-5 w-[400px]">
-                            <UploadImage />
-                        </div>
-                        <div className="p-5 grow">
-                            <label htmlFor="name">
-                                <p>Ismi:</p>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    className=" rounded-lg py-3 mb-3"
-                                    placeholder="Ismi"
-                                />
-                            </label>
-                            <label htmlFor="lastname">
-                                <p>Sharifi:</p>
-                                <Input
-                                    id="lastname"
-                                    type="text"
-                                    className=" rounded-lg py-3 mb-3"
-                                    placeholder="Sharifi"
-                                />
-                            </label>
-                            <label htmlFor="birth_of">
-                                <p>Tugulgan sanasi:</p>
-                                <Input
-                                    id="birth_of"
-                                    type="date"
-                                    className=" rounded-lg py-3 mb-3"
-                                    placeholder="Tugulgan sanasi"
-                                />
-                            </label>
-                            <label htmlFor="death_of">
-                                <p>Vafot etgan sanasi:</p>
-                                <Input
-                                    id="death_of"
-                                    type="date"
-                                    className=" rounded-lg py-3 mb-3"
-                                    placeholder="Vafot etgan sanasi"
-                                />
-                            </label>
-                            <label htmlFor="country">
-                                <p>Davlati</p>
-                                <Select
-                                    className="w-full my-8"
-                                    showSearch
-                                    placeholder="Select a person"
-                                    optionFilterProp="children"
-                                    onChange={onChange}
-                                    onSearch={onSearch}
-                                    filterOption={filterOption}
-                                    options={countryList?.map((item) => {
-                                        return {
-                                            label: item.name,
-                                            value: item.name,
-                                        };
-                                    })}
-                                />
-                            </label>
-
-                            <Textarea id="comment" placeholder="BIO" required rows={4} />
-                        </div>
-                    </div>
-                </Modal>
+                <BookModal modal3={modal3} modal={SHOW_MODAL_3}/>
 
                 {/* Country modal */}
                 <Modal
@@ -337,7 +209,7 @@ const index = () => {
                                                     </p>
                                                 </Table.Cell>
                                             </Table.Row>
-                                        }) : null
+                                        }) : <h1 className="text-2xl text-bold">Ma'lumot topilmadi</h1>
                                     }
 
                                 </Table.Body>

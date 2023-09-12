@@ -17,7 +17,7 @@ const headers =  {
 
 
 const useCountry = {
-    createCountry: (data) => api.post("/country", data),
+    createCountry: (data) => api.post("/country", data, {headers}),
     getCountry: () => api.get("/country", {headers}),
     getCountryItem: (id) => api.get(`/country/${id}`, {headers}),
     updateCountry: (id,data) => api.put(`/country/${id}`, data),
