@@ -17,14 +17,12 @@ const SignUp = () => {
             first_name: values.firstName,
             last_name: values.lastName,
             phone: values.phone,
-            password: values.password,
             email: values.email,
-            user_photo: "avatar.png"
+            password: values.password
         };
 
         useAuth.register(newUser).then((res) => {
-            console.log(res);
-            if (res.data.status === 200) {
+            if (res.status === 201) {
                 
                 toast.success(`${values.firstName} ro'yhatdan o'tildi!`);
                 setTimeout(() => {
@@ -33,9 +31,8 @@ const SignUp = () => {
             }
            
         }).catch((err) => {
-            console.log(err.message)
+            console.log(err)
             toast.error("Xatolik!");
-
         })
     };
     const onFinishFailed = (errorInfo) => {
@@ -52,7 +49,7 @@ const SignUp = () => {
                 <ToastContainer />
                 <h2 className="text-[36px] text-[#1A1919] font-['ArialBlack']">Ro'yhatdan o'tish</h2>
                 <h3 className='my-4 text-sm'>
-                    Avval ro'yhatdan otganmisiz? <Link to="/signin">Kirish</Link>
+                    Avval ro'yhatdan otganmisiz? <Link to="/signin" className="font-bold text-indigo-600">Kirish</Link>
                 </h3>
                 <Form
                     name="basic"

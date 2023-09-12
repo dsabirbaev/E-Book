@@ -16,13 +16,18 @@ const SignIn = () => {
 
         useAuth.login(user).then((res) => {
           
-            localStorage.setItem("token", Date.now());
-            localStorage.setItem("user", JSON.stringify(res.data.user));
+            localStorage.setItem("token", res?.data?.token);
+            localStorage.setItem("user", res?.data?.user?.first_name);
 
-            if(res.status === 200 && localStorage.getItem("token")){
-                navigate("/");
+            if(res.status === 201 && localStorage.getItem("token")){
+
+                toast.success("Tizimga kirdiniz!")
+                setTimeout(() => {
+                    navigate("/");
+                }, 2000)
+                
             }
-            toast.success("Success!")
+            
         }).catch((err) => {
             console.log(err.message);
             toast.error("Error!");
@@ -42,7 +47,7 @@ const SignIn = () => {
                 <ToastContainer/>
                 <h2 className="text-[36px] text-[#1A1919] font-['ArialBlack']">Login</h2>
                 <h3 className='my-4 text-sm'>
-                    Siz ro'yhatdan otmaganmisizmi? <Link to="/signup">Sign up</Link>
+                    Siz ro'yhatdan otmaganmisizmi? <Link to="/signup" className="font-bold text-indigo-600">Ro'yhatdan o'tish</Link>
                 </h3>
                 <Form
                     name="basic"
