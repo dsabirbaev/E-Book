@@ -1,9 +1,10 @@
 import React, { useState, useReducer, useEffect } from "react";
-import { Modal, Input} from "antd";
+import { Modal, Input } from "antd";
 import { Button, Tabs, Table } from "flowbite-react";
 
 import { Link } from "react-router-dom";
 import useCountry from "../../service/country/useCountry";
+import useAuthor from "../../service/author/useAuthor";
 import { ToastContainer, toast } from 'react-toastify';
 import "./style.scss";
 import AuthorModal from "./AuthorModal";
@@ -14,7 +15,7 @@ const onChange = (key) => {
     console.log(key);
 };
 const index = () => {
-    
+
 
 
     const initState = {
@@ -24,7 +25,9 @@ const index = () => {
         countryName: "",
         countryIcon: "",
         countryList: [],
-        countryLoad: false
+        countryLoad: false,
+        authorList: [],
+        authorLoad: false,
     }
 
     const [btnDisable, btnEnable] = useState(false);
@@ -47,6 +50,12 @@ const index = () => {
                 return { ...state, countryLoad: true };
             case "CLEAR_COUNTRY_INPUT":
                 return { ...state, countryName: " ", countryIcon: " " };
+
+            case "SET_AUTHOR":
+                return { ...state, authorList: action.payload };
+            case "SET_AUTHOR_LOAD":
+                return { ...state, countryLoad: true };
+
             default:
                 return state;
         }
@@ -90,21 +99,29 @@ const index = () => {
     const deleteCountry = (id) => {
         useCountry.deleteCountry(id).then((res) => {
             getCountry()
-            toast.success("Davlat o'chirildi!", { autoClose: 1000})
+            toast.success("Davlat o'chirildi!", { autoClose: 1000 })
         })
     }
 
-    const  SHOW_MODAL_2 = () => {
+    const SHOW_MODAL_2 = () => {
         dispatch({ type: "MODAL2" });
     }
 
-    const  SHOW_MODAL_3 = () => {
+    const SHOW_MODAL_3 = () => {
         dispatch({ type: "MODAL3" });
     }
- 
+
+    const getAuthor = () => {
+        useAuthor.getAuthor().then((res) => {
+            dispatch({ type: "SET_AUTHOR", payload: res.data })
+            dispatch({ type: "SET_AUTHOR_LOAD" })
+        })
+    }
+
 
     useEffect(() => {
         getCountry()
+        getAuthor()
     }, [])
 
     // if(countryLoad){
@@ -114,10 +131,10 @@ const index = () => {
         <section>
             <div className="container">
                 <ToastContainer />
-               
-                <AuthorModal modal2={modal2} countryList={countryList} modal={SHOW_MODAL_2}/>
 
-                <BookModal modal3={modal3} modal={SHOW_MODAL_3}/>
+                <AuthorModal modal2={modal2} countryList={countryList} modal={SHOW_MODAL_2} />
+
+                <BookModal modal3={modal3} modal={SHOW_MODAL_3} />
 
                 {/* Country modal */}
                 <Modal
@@ -219,30 +236,28 @@ const index = () => {
                             <Table hoverable>
                                 <Table.Head>
                                     <Table.HeadCell>Muallif</Table.HeadCell>
-                                    <Table.HeadCell>Kitoblari soni</Table.HeadCell>
                                     <Table.HeadCell>Tuguligan sanasi</Table.HeadCell>
+                                    <Table.HeadCell>Vafot etgan sanasi</Table.HeadCell>
+                                    <Table.HeadCell>Davlat</Table.HeadCell>
                                     <Table.HeadCell>BIO</Table.HeadCell>
-                                    <Table.HeadCell>
-                                        <span className="sr-only">Edit</span>
-                                    </Table.HeadCell>
+
                                 </Table.Head>
                                 <Table.Body className="divide-y">
+
                                     <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                             Apple MacBook Pro 17"
                                         </Table.Cell>
-                                        <Table.Cell>Sliver</Table.Cell>
-                                        <Table.Cell>Laptop</Table.Cell>
-                                        <Table.Cell>$2999</Table.Cell>
+                                        <Table.Cell>1999</Table.Cell>
+                                        <Table.Cell>2523</Table.Cell>
+                                        <Table.Cell>Uzbekistan</Table.Cell>
+                                        <Table.Cell>dddd</Table.Cell>
                                         <Table.Cell>
-                                            <a
-                                                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                                                href="/tables"
-                                            >
-                                                <p>Batafsil</p>
-                                            </a>
+                                            <p className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">Batafsil</p>
                                         </Table.Cell>
                                     </Table.Row>
+
+
                                 </Table.Body>
                             </Table>
                         </Tabs.Item>

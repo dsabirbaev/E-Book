@@ -1,24 +1,106 @@
-
+import { useState, useReducer } from "react";
 import UploadImage from "./../../components/UI/Upload/Upload";
 import { ToastContainer, toast } from 'react-toastify';
 import { Modal, Input, Select } from "antd";
 import { Textarea } from "flowbite-react";
+import useAuthor from "../../service/author/useAuthor";
+
 
 const AuthorModal = ({ modal2, countryList, modal }) => {
 
-
-    const filterOption = (input, option) =>
-        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-
+    const [btnDisable, btnEnable] = useState(false);
 
     const onChange = (value) => {
         console.log(`selected ${value}`);
+        dispatch({ type: "SET_COUNTRY_ID", payload: value })
     };
 
     const onSearch = (value) => {
         console.log('search:', value);
     };
 
+    const filterOption = (input, option) =>
+        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+
+    const setImage = (value) => {
+        dispatch({ type: "SET_IMAGE", payload: value })
+    }
+
+    const intState = {
+        f_name: "",
+        l_name: "",
+        b_date: "",
+        d_date: "",
+        country_id: "",
+        bio: "",
+        image: ""
+    }
+
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case "SET_NAME":
+                return { ...state, f_name: action.payload };
+            case "SET_LAST_NAME":
+                return { ...state, l_name: action.payload };
+            case "SET_B_DATE":
+                return { ...state, b_date: action.payload };
+            case "SET_D_DATE":
+                return { ...state, d_date: action.payload };
+            case "SET_COUNTRY_ID":
+                return { ...state, country_id: action.payload };
+            case "SET_BIO":
+                return { ...state, bio: action.payload };
+            case "SET_IMAGE":
+                return { ...state, image: action.payload };
+            default:
+                return state;
+        }
+    }
+
+    const [{ f_name, l_name, b_date, d_date, country_id, bio, image }, dispatch] = useReducer(reducer, intState);
+
+    const addAuthor = () => {
+        const newAuthor = {
+            first_name: f_name,
+            last_name: l_name,
+            date_birth: b_date,
+            date_death: d_date,
+            country_id: String(country_id),
+            bio: bio,
+            image: image
+        }
+
+        console.log(newAuthor);
+
+        if (Object.keys(newAuthor?.image).length &&
+            newAuthor?.first_name?.length && 
+            newAuthor?.last_name?.length && 
+            newAuthor?.date_birth?.length && 
+            newAuthor?.date_death?.length && 
+            newAuthor?.country_id?.length && 
+            newAuthor?.bio?.length){
+
+                useAuthor.createAuthor(newAuthor).then((res) => {
+                    console.log(res)
+                    toast.success("Muallif qo'shildi!")
+                    
+                    setTimeout(() => {
+                        modal();
+                    }, 1000)
+                    btnEnable(false);
+                    
+                }).catch((err) => {
+                    console.log(err);
+                    toast.error("Xatolik bo'ldi!")
+                })
+
+
+            }else {
+                toast.warn("Hamma qatorni to'ltiring!")
+            }
+         
+    }
     return (
         <div>
             <ToastContainer />
@@ -27,13 +109,14 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                 cancelText="Bekor qilish"
                 title="Muallif qushish"
                 open={modal2}
-                onOk={() => modal()}
+                onOk={() => addAuthor()}
                 onCancel={() => modal()}
                 width={"1000px"}
+                okButtonProps={{ disabled: btnDisable }}
             >
                 <div className="flex">
                     <div className="p-5 w-[400px]">
-                        <UploadImage />
+                        <UploadImage setImage={setImage} />
                     </div>
                     <div className="p-5 grow">
                         <label htmlFor="name">
@@ -43,6 +126,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 type="text"
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Ismi"
+                                onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
                             />
                         </label>
                         <label htmlFor="lastname">
@@ -52,6 +136,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 type="text"
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Sharifi"
+                                onChange={(e) => dispatch({ type: "SET_LAST_NAME", payload: e.target.value })}
                             />
                         </label>
                         <label htmlFor="birth_of">
@@ -61,6 +146,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 type="date"
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Tugulgan sanasi"
+                                onChange={(e) => dispatch({ type: "SET_B_DATE", payload: e.target.value })}
                             />
                         </label>
                         <label htmlFor="death_of">
@@ -70,6 +156,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 type="date"
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Vafot etgan sanasi"
+                                onChange={(e) => dispatch({ type: "SET_D_DATE", payload: e.target.value })}
                             />
                         </label>
                         <label htmlFor="country">
@@ -85,13 +172,13 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 options={countryList?.map((item) => {
                                     return {
                                         label: item.name,
-                                        value: item.name,
+                                        value: item.id,
                                     };
                                 })}
                             />
                         </label>
 
-                        <Textarea id="comment" placeholder="BIO" required rows={4} />
+                        <Textarea onChange={(e) => dispatch({ type: "SET_BIO", payload: e.target.value })} id="comment" placeholder="BIO" required rows={4} />
                     </div>
                 </div>
             </Modal>

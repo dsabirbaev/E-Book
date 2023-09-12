@@ -10,10 +10,15 @@ const headers =  {
 
 
 const useAuthor = {
-    createAuthor: (data) => api.post("/author", data),
+    createAuthor: (data) => api.post("/author", data, {
+        headers : {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}` 
+        }
+    }),
     getAuthor: () => api.get("/author", {headers}),
     getAuthorItem: (id) => api.get(`/author/${id}`, {headers}),
-    updateAuthor: (id,data) => api.put(`/author/${id}`, data),
+    updateAuthor: (id,data) => api.put(`/author/${id}`, data, {headers}),
     deleteAuthor: (id) => api.delete(`/author/${id}`, {headers}),
 }
 

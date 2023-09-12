@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
+
+
+
+
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -10,7 +14,7 @@ const getBase64 = (file) =>
     });
 
 
-const UploadImage = () => {
+const UploadImage = ({setImage}) => {
 
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -32,10 +36,14 @@ const UploadImage = () => {
 
     const handleChange = async({ fileList: newFileList }) => {
         setFileList(newFileList);
+        
         let fileLists = await fileList[0];
 
         if(fileLists.percent){
-            console.log(fileList[0]);
+            if(fileLists.status == "uploading"){
+                setImage(fileLists.originFileObj);
+            }
+           
         }
     }
 
