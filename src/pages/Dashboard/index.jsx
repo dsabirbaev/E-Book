@@ -55,13 +55,14 @@ const index = () => {
                 return { ...state, authorList: action.payload };
             case "SET_AUTHOR_LOAD":
                 return { ...state, countryLoad: true };
+           
 
             default:
                 return state;
         }
     }
 
-    const [{ modal1, modal2, modal3, countryName, countryIcon, countryList, countryLoad }, dispatch] = useReducer(reducer, initState);
+    const [{ modal1, modal2, modal3, countryName, countryIcon, countryList, countryLoad, authorList, authorLoad }, dispatch] = useReducer(reducer, initState);
 
     const addNewCountry = () => {
         btnEnable(true);
@@ -113,6 +114,7 @@ const index = () => {
 
     const getAuthor = () => {
         useAuthor.getAuthor().then((res) => {
+
             dispatch({ type: "SET_AUTHOR", payload: res.data })
             dispatch({ type: "SET_AUTHOR_LOAD" })
         })
@@ -226,7 +228,11 @@ const index = () => {
                                                     </p>
                                                 </Table.Cell>
                                             </Table.Row>
-                                        }) : <h1 className="text-2xl text-bold">Ma'lumot topilmadi</h1>
+                                        }) : <Table.Row>
+                                            <Table.Cell>
+                                                <h1 className="text-2xl text-bold">Ma'lumot topilmadi</h1>
+                                            </Table.Cell>
+                                        </Table.Row>
                                     }
 
                                 </Table.Body>
@@ -243,19 +249,29 @@ const index = () => {
 
                                 </Table.Head>
                                 <Table.Body className="divide-y">
+                                    {
+                                        authorList.length ? authorList?.map((item) => {
+                                            return <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                    {item.first_name}
+                                                </Table.Cell>
+                                                <Table.Cell>1999</Table.Cell>
+                                                <Table.Cell>2523</Table.Cell>
+                                                <Table.Cell>Uzbekistan</Table.Cell>
+                                                <Table.Cell>dddd</Table.Cell>
+                                                <Table.Cell>
+                                                    <p className="font-medium text-cyan-600 hover:text-cyan-300 dark:text-cyan-500 cursor-pointer">Batafsil</p>
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        }) : <Table.Row>
+                                            <Table.Cell>
+                                                <h1 className="text-2xl text-bold">Ma'lumot topilmadi</h1>
+                                            </Table.Cell>
 
-                                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                            Apple MacBook Pro 17"
-                                        </Table.Cell>
-                                        <Table.Cell>1999</Table.Cell>
-                                        <Table.Cell>2523</Table.Cell>
-                                        <Table.Cell>Uzbekistan</Table.Cell>
-                                        <Table.Cell>dddd</Table.Cell>
-                                        <Table.Cell>
-                                            <p className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">Batafsil</p>
-                                        </Table.Cell>
-                                    </Table.Row>
+                                        </Table.Row>
+
+                                    }
+
 
 
                                 </Table.Body>

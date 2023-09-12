@@ -24,6 +24,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
 
 
     const setImage = (value) => {
+        
         dispatch({ type: "SET_IMAGE", payload: value })
     }
 
@@ -53,6 +54,9 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                 return { ...state, bio: action.payload };
             case "SET_IMAGE":
                 return { ...state, image: action.payload };
+
+            case "CLEAR_AUTHOR_INPUT":
+                return { ...state, f_name: " ", l_name: " ", b_date: " ", d_date: " ", country_id: " ", bio: " ", image: " "};
             default:
                 return state;
         }
@@ -71,35 +75,35 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
             image: image
         }
 
-        console.log(newAuthor);
-
         if (Object.keys(newAuthor?.image).length &&
-            newAuthor?.first_name?.length && 
-            newAuthor?.last_name?.length && 
-            newAuthor?.date_birth?.length && 
-            newAuthor?.date_death?.length && 
-            newAuthor?.country_id?.length && 
-            newAuthor?.bio?.length){
+            newAuthor?.first_name?.length &&
+            newAuthor?.last_name?.length &&
+            newAuthor?.date_birth?.length &&
+            newAuthor?.date_death?.length &&
+            newAuthor?.country_id?.length &&
+            newAuthor?.bio?.length) {
 
-                useAuthor.createAuthor(newAuthor).then((res) => {
-                    console.log(res)
-                    toast.success("Muallif qo'shildi!")
-                    
-                    setTimeout(() => {
-                        modal();
-                    }, 1000)
-                    btnEnable(false);
-                    
-                }).catch((err) => {
-                    console.log(err);
-                    toast.error("Xatolik bo'ldi!")
-                })
+            useAuthor.createAuthor(newAuthor).then((res) => {
+                console.log(res)
+                toast.success("Muallif qo'shildi!", { autoClose: 1000})
+                dispatch({ type: "CLEAR_AUTHOR_INPUT" });
+                btnEnable(false);
+                setTimeout(() => {
+                    modal();
+                }, 1000)
+                
+               
+
+            }).catch((err) => {
+                console.log(err);
+                toast.error("Xatolik bo'ldi!", { autoClose: 1000})
+            })
 
 
-            }else {
-                toast.warn("Hamma qatorni to'ltiring!")
-            }
-         
+        } else {
+            toast.warn("Hamma qatorni to'ltiring!", { autoClose: 1000})
+        }
+
     }
     return (
         <div>
@@ -126,6 +130,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 type="text"
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Ismi"
+                                value={f_name}
                                 onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
                             />
                         </label>
@@ -136,6 +141,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 type="text"
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Sharifi"
+                                value={l_name}
                                 onChange={(e) => dispatch({ type: "SET_LAST_NAME", payload: e.target.value })}
                             />
                         </label>
@@ -146,6 +152,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 type="date"
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Tugulgan sanasi"
+                                value={b_date}
                                 onChange={(e) => dispatch({ type: "SET_B_DATE", payload: e.target.value })}
                             />
                         </label>
@@ -156,12 +163,14 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                                 type="date"
                                 className=" rounded-lg py-3 mb-3"
                                 placeholder="Vafot etgan sanasi"
+                                value={d_date}
                                 onChange={(e) => dispatch({ type: "SET_D_DATE", payload: e.target.value })}
                             />
                         </label>
                         <label htmlFor="country">
                             <p>Davlati</p>
                             <Select
+                                value={country_id}
                                 className="w-full my-8"
                                 showSearch
                                 placeholder="Select a person"
@@ -178,7 +187,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
                             />
                         </label>
 
-                        <Textarea onChange={(e) => dispatch({ type: "SET_BIO", payload: e.target.value })} id="comment" placeholder="BIO" required rows={4} />
+                        <Textarea  value={bio} onChange={(e) => dispatch({ type: "SET_BIO", payload: e.target.value })} id="comment" placeholder="BIO" required rows={4} />
                     </div>
                 </div>
             </Modal>

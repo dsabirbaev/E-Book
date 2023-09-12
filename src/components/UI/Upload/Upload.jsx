@@ -69,6 +69,7 @@ const UploadImage = ({setImage}) => {
                 fileList={fileList}
                 onPreview={handlePreview}
                 onChange={handleChange}
+                
             >
                 {fileList.length >= 1 ? null : uploadButton}
             </Upload>
