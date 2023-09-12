@@ -7,6 +7,8 @@ import { Button, Form, Input } from 'antd';
 import img from "../../assets/images/signup.png";
 import useAuth from "../../service/auth/useAuth";
 import { ToastContainer, toast } from 'react-toastify';
+
+
 const SignUp = () => {
 
     const navigate = useNavigate();
@@ -22,6 +24,7 @@ const SignUp = () => {
         };
 
         useAuth.register(newUser).then((res) => {
+            console.log(res)
             if (res.status === 201) {
                 
                 toast.success(`${values.firstName} ro'yhatdan o'tildi!`);
@@ -31,7 +34,7 @@ const SignUp = () => {
             }
            
         }).catch((err) => {
-            console.log(err)
+            console.log(err)  
             toast.error("Xatolik!");
         })
     };
