@@ -5,12 +5,12 @@ import { Button, Tabs, Table } from "flowbite-react";
 import { Link } from "react-router-dom";
 import useCountry from "../../service/country/useCountry";
 import useAuthor from "../../service/author/useAuthor";
-
+import useCategory from "../../service/category/useCategory";
 import { ToastContainer, toast } from 'react-toastify';
 import "./style.scss";
 import AuthorModal from "./AuthorModal";
 import BookModal from "./BookModal";
-
+import CategoryModal from "./CategoryModal";
 
 
 const index = () => {
@@ -21,12 +21,15 @@ const index = () => {
         modal1: false,
         modal2: false,
         modal3: false,
+        modal4: false,
         countryName: "",
         countryIcon: "",
         countryList: [],
         countryLoad: false,
         authorList: [],
         authorLoad: false,
+        categoryList: [],
+        categoryLoad: false,
     }
 
     const [btnDisable, btnEnable] = useState(false);
@@ -39,6 +42,8 @@ const index = () => {
                 return { ...state, modal2: !state.modal2 };
             case "MODAL3":
                 return { ...state, modal3: !state.modal3 };
+            case "MODAL4":
+                return { ...state, modal4: !state.modal4 };
             case "SETCOUNTRY_NAME":
                 return { ...state, countryName: action.payload };
             case "SETCOUNTRY_ICON":
@@ -54,14 +59,18 @@ const index = () => {
                 return { ...state, authorList: action.payload };
             case "SET_AUTHOR_LOAD":
                 return { ...state, countryLoad: true };
-           
+
+            case "SET_CATEGORY":
+                return { ...state, categoryList: action.payload };
+            case "SET_CATEGORY_LOAD":
+                return { ...state, categoryLoad: true };
 
             default:
                 return state;
         }
     }
 
-    const [{ modal1, modal2, modal3, countryName, countryIcon, countryList, countryLoad, authorList, authorLoad }, dispatch] = useReducer(reducer, initState);
+    const [{ modal1, modal2, modal3, modal4, countryName, countryIcon, countryList, countryLoad, authorList, authorLoad, categoryList, categoryLoad }, dispatch] = useReducer(reducer, initState);
 
     const addNewCountry = () => {
         btnEnable(true);
@@ -112,6 +121,12 @@ const index = () => {
         dispatch({ type: "MODAL3" });
     }
 
+    const SHOW_MODAL_4 = () => {
+        dispatch({ type: "MODAL4" });
+        getCategory();
+    }
+
+
     const getAuthor = () => {
         useAuthor.getAuthor().then((res) => {
 
@@ -122,20 +137,33 @@ const index = () => {
 
     const deleteAuthor = (id) => {
         useAuthor.deleteAuthor(id).then((res) => {
-            getCountry()
+            getAuthor()
             toast.success("Mualif o'chirildi!", { autoClose: 1000 })
         })
     }
 
-   
+    const getCategory = () => {
+        useCategory.getCategory().then((res) => {
+
+            dispatch({ type: "SET_CATEGORY", payload: res.data })
+            dispatch({ type: "SET_CATEGORY_LOAD" })
+        })
+    }
+
+    const deleteCategory = (id) => {
+        useCategory.deleteCategory(id).then((res) => {
+            getCategory()
+            toast.success("Kategoriya o'chirildi!", { autoClose: 1000 })
+        })
+    }
 
     useEffect(() => {
         getCountry()
         getAuthor()
-     
-    }, [getCountry, getAuthor])
+        getCategory()
+    }, [])
 
-   
+
     return (
         <section>
             <div className="container">
@@ -145,7 +173,8 @@ const index = () => {
 
                 <BookModal modal3={modal3} modal={SHOW_MODAL_3} />
 
-                {/* Country modal */}
+                <CategoryModal modal4={modal4} modal={SHOW_MODAL_4} />
+
                 <Modal
                     okText="Saqlash"
                     cancelText="Bekor qilish"
@@ -200,6 +229,9 @@ const index = () => {
                         <Button gradientMonochrome="purple" onClick={() => dispatch({ type: "MODAL2" })}>
                             Muallif qo'shish
                         </Button>
+                        <Button gradientMonochrome="success" onClick={() => dispatch({ type: "MODAL4" })}>
+                            Kategoriya qo'shish
+                        </Button>
                         <Button gradientMonochrome="success" onClick={() => dispatch({ type: "MODAL3" })}>
                             Kitob qo'shish
                         </Button>
@@ -234,7 +266,7 @@ const index = () => {
                                                         Tahrirlash
                                                     </p>
                                                 </Table.Cell>
-                                                
+
                                             </Table.Row>
                                         }) : <Table.Row>
                                             <Table.Cell>
@@ -249,19 +281,22 @@ const index = () => {
                         <Tabs.Item title="Mualliflar">
                             <Table hoverable>
                                 <Table.Head>
-                                  
+                                    <Table.HeadCell>Rasm</Table.HeadCell>
                                     <Table.HeadCell>Muallif</Table.HeadCell>
                                     <Table.HeadCell>Tuguligan sanasi</Table.HeadCell>
                                     <Table.HeadCell>Vafot etgan sanasi</Table.HeadCell>
                                     <Table.HeadCell>Davlat</Table.HeadCell>
                                     <Table.HeadCell>BIO</Table.HeadCell>
-
+                                    <Table.HeadCell>O'chirish</Table.HeadCell>
+                                    <Table.HeadCell>Ma'lumot</Table.HeadCell>
                                 </Table.Head>
                                 <Table.Body className="divide-y">
                                     {
                                         authorList.length ? authorList?.map((item) => {
                                             return <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                                
+                                                <Table.Cell>
+                                                    <img src={`https://literature-18wr.onrender.com/api/image/${item.image}`} alt={item.first_name} className="w-10 h-10 rounded-full" />
+                                                </Table.Cell>
                                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                                     {item?.first_name} {item?.last_name}
                                                 </Table.Cell>
@@ -269,11 +304,12 @@ const index = () => {
                                                 <Table.Cell>{item?.date_death}</Table.Cell>
                                                 <Table.Cell>{item?.country?.name}</Table.Cell>
                                                 <Table.Cell>{item?.bio}</Table.Cell>
-                                                <Table.Cell>
-                                                    <p className="font-medium text-cyan-600 hover:text-cyan-300 dark:text-cyan-500 cursor-pointer">Batafsil</p>
-                                                </Table.Cell>
+
                                                 <Table.Cell>
                                                     <Button onClick={() => deleteAuthor(item?.id)} gradientMonochrome="failure">O'chirish </Button>
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <p className="font-medium text-cyan-600 hover:text-cyan-300 dark:text-cyan-500 cursor-pointer">Batafsil</p>
                                                 </Table.Cell>
                                             </Table.Row>
                                         }) : <Table.Row>
@@ -290,6 +326,40 @@ const index = () => {
                                 </Table.Body>
                             </Table>
                         </Tabs.Item>
+
+                        <Tabs.Item title="Kategoriya">
+                            <Table hoverable>
+                                <Table.Head>
+                                    <Table.HeadCell>Nomi</Table.HeadCell>
+                                    <Table.HeadCell>O'chirish</Table.HeadCell>
+                                    <Table.HeadCell>Tahrirlash</Table.HeadCell>
+                                </Table.Head>
+                                <Table.Body className="divide-y">
+                                    {
+                                        categoryList.length ? categoryList.map((item) => {
+                                            return <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                    {item?.name}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <Button onClick={() => deleteCategory(item?.id)} gradientMonochrome="failure">O'chirish </Button>
+                                                </Table.Cell>
+
+                                                <Table.Cell>
+                                                    <p className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">Tahrirlash</p>
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        }) : <Table.Row>
+                                                <Table.Cell>
+                                                    <h1 className="text-2xl text-bold">Ma'lumot topilmadi</h1>
+                                                </Table.Cell>
+
+                                            </Table.Row>
+                                   }
+                                </Table.Body>
+                            </Table>
+                        </Tabs.Item>
+
                         <Tabs.Item title="Kitoblar">
                             <Table hoverable>
                                 <Table.Head>
