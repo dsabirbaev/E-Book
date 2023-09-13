@@ -5,6 +5,7 @@ import { Button, Tabs, Table } from "flowbite-react";
 import { Link } from "react-router-dom";
 import useCountry from "../../service/country/useCountry";
 import useAuthor from "../../service/author/useAuthor";
+
 import { ToastContainer, toast } from 'react-toastify';
 import "./style.scss";
 import AuthorModal from "./AuthorModal";
@@ -16,7 +17,7 @@ const onChange = (key) => {
 };
 const index = () => {
 
-
+    const [authorImage, setAuthorImage] = useState("");
 
     const initState = {
         modal1: false,
@@ -120,15 +121,22 @@ const index = () => {
         })
     }
 
+    const deleteAuthor = (id) => {
+        useAuthor.deleteAuthor(id).then((res) => {
+            getCountry()
+            toast.success("Mualif o'chirildi!", { autoClose: 1000 })
+        })
+    }
+
+   
 
     useEffect(() => {
         getCountry()
         getAuthor()
-    }, [])
+     
+    }, [getCountry, getAuthor])
 
-    // if(countryLoad){
-    //     return <h1 className="text-2xl">Loading . . .</h1>
-    // }
+   
     return (
         <section>
             <div className="container">
@@ -142,7 +150,7 @@ const index = () => {
                 <Modal
                     okText="Saqlash"
                     cancelText="Bekor qilish"
-                    title="Davlat qushish"
+                    title="Davlat qo'shish"
                     open={modal1}
                     onOk={() => addNewCountry()}
                     onCancel={() => dispatch({ type: "MODAL1" })}
@@ -188,13 +196,13 @@ const index = () => {
                     </div>
                     <div className="flex gap-x-2 font-mono">
                         <Button gradientMonochrome="info" onClick={() => dispatch({ type: "MODAL1" })}>
-                            DAvlat qushish
+                            Davlat qo'shish
                         </Button>
                         <Button gradientMonochrome="purple" onClick={() => dispatch({ type: "MODAL2" })}>
-                            Muallif qushish
+                            Muallif qo'shish
                         </Button>
                         <Button gradientMonochrome="success" onClick={() => dispatch({ type: "MODAL3" })}>
-                            Kitob qushish
+                            Kitob qo'shish
                         </Button>
 
                     </div>
@@ -220,13 +228,14 @@ const index = () => {
                                                 </Table.Cell>
                                                 <Table.Cell>{item?.icon}</Table.Cell>
                                                 <Table.Cell>
-                                                    <Button onClick={() => deleteCountry(item.id)} gradientMonochrome="failure">O'chirish </Button>
+                                                    <Button onClick={() => deleteCountry(item?.id)} gradientMonochrome="failure">O'chirish </Button>
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     <p className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
                                                         Tahrirlash
                                                     </p>
                                                 </Table.Cell>
+                                                
                                             </Table.Row>
                                         }) : <Table.Row>
                                             <Table.Cell>
@@ -241,6 +250,7 @@ const index = () => {
                         <Tabs.Item title="Mualliflar">
                             <Table hoverable>
                                 <Table.Head>
+                                  
                                     <Table.HeadCell>Muallif</Table.HeadCell>
                                     <Table.HeadCell>Tuguligan sanasi</Table.HeadCell>
                                     <Table.HeadCell>Vafot etgan sanasi</Table.HeadCell>
@@ -252,15 +262,19 @@ const index = () => {
                                     {
                                         authorList.length ? authorList?.map((item) => {
                                             return <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                                
                                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                                    {item.first_name}
+                                                    {item?.first_name} {item?.last_name}
                                                 </Table.Cell>
-                                                <Table.Cell>1999</Table.Cell>
-                                                <Table.Cell>2523</Table.Cell>
-                                                <Table.Cell>Uzbekistan</Table.Cell>
-                                                <Table.Cell>dddd</Table.Cell>
+                                                <Table.Cell>{item?.date_birth}</Table.Cell>
+                                                <Table.Cell>{item?.date_death}</Table.Cell>
+                                                <Table.Cell>{item?.country?.name}</Table.Cell>
+                                                <Table.Cell>{item?.bio}</Table.Cell>
                                                 <Table.Cell>
                                                     <p className="font-medium text-cyan-600 hover:text-cyan-300 dark:text-cyan-500 cursor-pointer">Batafsil</p>
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <Button onClick={() => deleteAuthor(item?.id)} gradientMonochrome="failure">O'chirish </Button>
                                                 </Table.Cell>
                                             </Table.Row>
                                         }) : <Table.Row>

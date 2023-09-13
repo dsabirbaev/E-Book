@@ -6,6 +6,8 @@ import { Textarea } from "flowbite-react";
 
 
 const BookModal = ({modal3, modal}) => {
+
+
     return (
         <div>
             <ToastContainer />
@@ -39,7 +41,7 @@ const BookModal = ({modal3, modal}) => {
                             placeholder="Yili"
                         />
                         <Input
-                            type="number"
+                            type="text"
                             className=" rounded-lg py-3 mb-3"
                             placeholder="Kitob narhi"
                         />
