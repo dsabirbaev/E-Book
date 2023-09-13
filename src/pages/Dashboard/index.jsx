@@ -299,10 +299,6 @@ const index = () => {
                                     <Table.HeadCell>Narhi</Table.HeadCell>
                                     <Table.HeadCell>Sahifalar</Table.HeadCell>
                                     <Table.HeadCell>Yil</Table.HeadCell>
-
-                                    <Table.HeadCell>
-                                        <span className="sr-only">Edit</span>
-                                    </Table.HeadCell>
                                 </Table.Head>
                                 <Table.Body className="divide-y">
                                     <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
