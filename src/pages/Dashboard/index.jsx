@@ -12,9 +12,7 @@ import AuthorModal from "./AuthorModal";
 import BookModal from "./BookModal";
 
 
-const onChange = (key) => {
-    console.log(key);
-};
+
 const index = () => {
 
     const [authorImage, setAuthorImage] = useState("");
@@ -107,6 +105,7 @@ const index = () => {
 
     const SHOW_MODAL_2 = () => {
         dispatch({ type: "MODAL2" });
+        getAuthor();
     }
 
     const SHOW_MODAL_3 = () => {
