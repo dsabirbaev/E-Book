@@ -171,7 +171,7 @@ const index = () => {
 
                 <AuthorModal modal2={modal2} countryList={countryList} modal={SHOW_MODAL_2} />
 
-                <BookModal modal3={modal3} modal={SHOW_MODAL_3} />
+                <BookModal countryList={countryList} categoryList={categoryList} authorList={authorList} modal3={modal3} modal={SHOW_MODAL_3} />
 
                 <CategoryModal modal4={modal4} modal={SHOW_MODAL_4} />
 

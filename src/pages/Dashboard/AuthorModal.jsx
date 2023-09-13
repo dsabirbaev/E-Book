@@ -103,7 +103,7 @@ const AuthorModal = ({ modal2, countryList, modal }) => {
 
 
         } else {
-            toast.warn("Hamma qatorni to'ltiring!", { autoClose: 1000})
+            toast.warn("Hamma qatorni to'ldiring!", { autoClose: 1000})
         }
 
     }
