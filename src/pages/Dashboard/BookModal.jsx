@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Modal, Input, Select } from "antd";
 import { Textarea } from "flowbite-react";
 import useBook from "../../service/book/useBook";
-
+import useFile from '../../service/fileUpload/useFileUpload';
 const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => {
 
     const initState = {
@@ -89,6 +89,19 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
         }
     }
 
+
+    const upload = (file) => {
+        console.log(file)
+        const formData = new FormData();
+        formData.append('image', file);
+        useFile.uploadFile(file).then((formData) => {
+            console.log(res)
+            dispatch({ type: "SET_BOOK_COVER", book_cover: formData})
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
     return (
         <div>
             <ToastContainer />
@@ -103,7 +116,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
             >
                 <div className="flex">
                     <div className="p-5 w-[400px]">
-                        <input onChange={(e) => dispatch({ type: "SET_BOOK_COVER", book_cover: e.target.files[0] })} type="file" accept="jpg/png" />
+                        <input onChange={(e) => upload(e.target.files[0])} type="file" accept="image/jpeg, image/png" />
                     </div>
                     <div className="p-5 grow">
                         <Input
@@ -140,7 +153,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
                             </option>
                             {
                                 countryList.length ? countryList.map((item) => {
-                                    return <option value={item.id}>{item?.name}</option>
+                                    return <option key={item.id} value={item.id}>{item?.name}</option>
                                 }) : <option value="0">Ma'lumot topilmadi!</option>
                             }
 
@@ -151,7 +164,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
                             </option>
                             {
                                 categoryList.length ? categoryList.map((item) => {
-                                    return <option value={item.id}>{item?.name}</option>
+                                    return <option key={item.id} value={item.id}>{item?.name}</option>
                                 }) : <option value="0">Ma'lumot topilmadi!</option>
                             }
                         </select>
@@ -161,7 +174,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
                             </option>
                             {
                                 authorList.length ? authorList.map((item) => {
-                                    return <option value={item.id}>{item?.first_name} {item?.last_name}</option>
+                                    return <option key={item.id} value={item.id}>{item?.first_name} {item?.last_name}</option>
                                 }) : <option value="0">Ma'lumot topilmadi!</option>
                             }
 

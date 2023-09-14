@@ -1,11 +1,12 @@
 import React, { useState, useReducer, useEffect } from "react";
-import { Modal, Input } from "antd";
+import { Modal, Input, Avatar } from "antd";
 import { Button, Tabs, Table } from "flowbite-react";
 
 import { Link } from "react-router-dom";
 import useCountry from "../../service/country/useCountry";
 import useAuthor from "../../service/author/useAuthor";
 import useCategory from "../../service/category/useCategory";
+import useBook from "../../service/book/useBook";
 import { ToastContainer, toast } from 'react-toastify';
 import "./style.scss";
 import AuthorModal from "./AuthorModal";
@@ -30,6 +31,8 @@ const index = () => {
         authorLoad: false,
         categoryList: [],
         categoryLoad: false,
+        bookList: [],
+        bookLoad: false,
     }
 
     const [btnDisable, btnEnable] = useState(false);
@@ -65,12 +68,16 @@ const index = () => {
             case "SET_CATEGORY_LOAD":
                 return { ...state, categoryLoad: true };
 
+            case "SET_BOOK":
+                return { ...state, bookList: action.payload };
+            case "SET_BOOK_LOAD":
+                return { ...state, bookLoad: true };
             default:
                 return state;
         }
     }
 
-    const [{ modal1, modal2, modal3, modal4, countryName, countryIcon, countryList, countryLoad, authorList, authorLoad, categoryList, categoryLoad }, dispatch] = useReducer(reducer, initState);
+    const [{ modal1, modal2, modal3, modal4, countryName, countryIcon, countryList, countryLoad, authorList, authorLoad, categoryList, categoryLoad, bookList, bookLoad }, dispatch] = useReducer(reducer, initState);
 
     const addNewCountry = () => {
         btnEnable(true);
@@ -119,6 +126,7 @@ const index = () => {
 
     const SHOW_MODAL_3 = () => {
         dispatch({ type: "MODAL3" });
+        getBook();
     }
 
     const SHOW_MODAL_4 = () => {
@@ -157,10 +165,25 @@ const index = () => {
         })
     }
 
+    const getBook = () => {
+        useBook.getBook().then((res) => {
+            dispatch({ type: "SET_BOOK", payload: res.data })
+            dispatch({ type: "SET_BOOK_LOAD" })
+        })
+    }
+
+    const deleteBook = (id) => {
+        useBook.deleteBook(id).then((res) => {
+            getBook()
+            toast.success("Kitob o'chirildi!", { autoClose: 1000 })
+        })
+    }
+
     useEffect(() => {
         getCountry()
         getAuthor()
         getCategory()
+        getBook()
     }, [])
 
 
@@ -350,12 +373,12 @@ const index = () => {
                                                 </Table.Cell>
                                             </Table.Row>
                                         }) : <Table.Row>
-                                                <Table.Cell>
-                                                    <h1 className="text-2xl text-bold">Ma'lumot topilmadi</h1>
-                                                </Table.Cell>
+                                            <Table.Cell>
+                                                <h1 className="text-2xl text-bold">Ma'lumot topilmadi</h1>
+                                            </Table.Cell>
 
-                                            </Table.Row>
-                                   }
+                                        </Table.Row>
+                                    }
                                 </Table.Body>
                             </Table>
                         </Tabs.Item>
@@ -365,27 +388,42 @@ const index = () => {
                                 <Table.Head>
                                     <Table.HeadCell>Nomi</Table.HeadCell>
                                     <Table.HeadCell>Muallifi</Table.HeadCell>
+                                    <Table.HeadCell>Janr</Table.HeadCell>
                                     <Table.HeadCell>Narhi</Table.HeadCell>
                                     <Table.HeadCell>Sahifalar</Table.HeadCell>
-                                    <Table.HeadCell>Yil</Table.HeadCell>
+                                    <Table.HeadCell>O'chirish</Table.HeadCell>
+                                    <Table.HeadCell>Tahrirlash</Table.HeadCell>
                                 </Table.Head>
                                 <Table.Body className="divide-y">
-                                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                            Apple MacBook Pro 17"
-                                        </Table.Cell>
-                                        <Table.Cell>Sliver</Table.Cell>
-                                        <Table.Cell>Laptop</Table.Cell>
-                                        <Table.Cell>$2999</Table.Cell>
-                                        <Table.Cell>
-                                            <a
-                                                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                                                href="/tables"
-                                            >
-                                                <p>Batafsil</p>
-                                            </a>
-                                        </Table.Cell>
-                                    </Table.Row>
+
+                                    {
+                                        bookList.length ? bookList.map((item) => {
+                                            return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                    <Avatar src={`https://literature-18wr.onrender.com/api/image/${item?.book_cover}`} shape="square" size="large" />
+                                                    <span className="ms-2">{item?.title}</span>
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <Avatar src={`https://literature-18wr.onrender.com/api/image/${item?.author?.image}`} size="large" />
+                                                    <span className="ms-2">{item?.author?.first_name} {item?.author?.last_name}</span>
+                                                </Table.Cell>
+                                                <Table.Cell>{item?.category?.name}</Table.Cell>
+                                                <Table.Cell>{item?.price} so'm</Table.Cell>
+                                                <Table.Cell>{item?.pages}</Table.Cell>
+                                                <Table.Cell>
+                                                    <Button onClick={() => deleteBook(item?.id)} gradientMonochrome="failure">O'chirish </Button>
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <p className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">Tahrirlash</p>
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        }) : <Table.Row>
+                                            <Table.Cell>
+                                                <h1 className="text-2xl text-bold">Ma'lumot topilmadi</h1>
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    }
+
                                 </Table.Body>
                             </Table>
                         </Tabs.Item>

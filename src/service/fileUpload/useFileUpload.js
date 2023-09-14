@@ -9,12 +9,12 @@ const headers =  {
 
 
 const useFile = {
-    createCountry: (data) => api.post("/image", data, {headers}),
-    getCountry: (fileName) => api.get(`/image/${fileName}`, {
+    uploadFile: (data) => api.post("/image", data, {headers}),
+    deleteFile: (fileName) => api.delete(`/image/${fileName}`, {
         headers : {
             Authorization: `Bearer ${localStorage.getItem("token")}` 
         }
-    }),
+    })
    
 }
 
