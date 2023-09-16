@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Modal, Input, Select } from "antd";
 import { Textarea } from "flowbite-react";
 import useBook from "../../service/book/useBook";
-import useFile from '../../service/fileUpload/useFileUpload';
+import useFile from '../../service/fileUpload/useFile';
 const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => {
 
     const initState = {
@@ -16,7 +16,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
         author_id: "",
         category_id: "",
         description: "",
-        book_cover: ""
+        book_cover: "NNI61926.png"
     };
 
     const reducer = (state, action) => {
@@ -90,17 +90,16 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
     }
 
 
-    const upload = (file) => {
-        console.log(file)
-        const formData = new FormData();
-        formData.append('image', file);
-        useFile.uploadFile(file).then((formData) => {
-            console.log(res)
-            dispatch({ type: "SET_BOOK_COVER", book_cover: formData})
-        }).catch((err) => {
-            console.log(err)
-        })
-    }
+    // const upload = (file) => {
+    //     console.log(file)
+       
+    //     useFile.uploadFile(file).then((res) => {
+    //         console.log(res)
+    //         dispatch({ type: "SET_BOOK_COVER", book_cover: res})
+    //     }).catch((err) => {
+    //         console.log(err)
+    //     })
+    // }
 
     return (
         <div>
@@ -116,7 +115,9 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
             >
                 <div className="flex">
                     <div className="p-5 w-[400px]">
-                        <input onChange={(e) => upload(e.target.files[0])} type="file" accept="image/jpeg, image/png" />
+                        <input 
+                        // onChange={(e) => upload(e.target.files[0])} 
+                        type="file" accept="jpeg/png" />
                     </div>
                     <div className="p-5 grow">
                         <Input
@@ -130,7 +131,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
                             type="number"
                             className=" rounded-lg py-3 mb-3"
                             placeholder="Sahifalar soni"
-                            value={pages}
+                            // value={pages}
                             onChange={(e) => dispatch({ type: "SET_PAGEs", pages: e.target.value })}
                         />
                         <Input
@@ -147,7 +148,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
                             value={price}
                             onChange={(e) => dispatch({ type: "SET_PRICE", price: e.target.value })}
                         />
-                        <select onChange={(e) => dispatch({ type: "SET_COUNTRY", country_id: e.target.value })} className="py-3 block " id="countries" required defaultValue={'DEFAULT'}>
+                        <select onChange={(e) => dispatch({ type: "SET_COUNTRY", country_id: e.target.value })} className="py-3 block mb-3" id="countries" required defaultValue={'DEFAULT'}>
                             <option disabled value="DEFAULT">
                                 Kitob davlatini tanglang
                             </option>
@@ -158,7 +159,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
                             }
 
                         </select>
-                        <select onChange={(e) => dispatch({ type: "SET_CATEGORY", category_id: e.target.value })} className="py-3 block" id="categories" required defaultValue={'DEFAULT'}>
+                        <select onChange={(e) => dispatch({ type: "SET_CATEGORY", category_id: e.target.value })} className="py-3 block mb-3" id="categories" required defaultValue={'DEFAULT'}>
                             <option disabled value="DEFAULT">
                                 Kitob kategoriyasini tanglang
                             </option>
@@ -168,7 +169,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
                                 }) : <option value="0">Ma'lumot topilmadi!</option>
                             }
                         </select>
-                        <select onChange={(e) => dispatch({ type: "SET_AUTHOR", author_id: e.target.value })} className="py-3 block" id="author" required defaultValue={'DEFAULT'}>
+                        <select onChange={(e) => dispatch({ type: "SET_AUTHOR", author_id: e.target.value })} className="py-3 block mb-3" id="author" required defaultValue={'DEFAULT'}>
                             <option disabled value="DEFAULT">
                                 Kitob muallifini tanglang
                             </option>

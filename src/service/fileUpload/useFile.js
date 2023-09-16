@@ -9,7 +9,9 @@ const headers =  {
 
 
 const useFile = {
-    uploadFile: (data) => api.post("/image", data, {headers}),
+    uploadFile: (data) => {
+        return api.post("/image", data, {headers})
+    },
     deleteFile: (fileName) => api.delete(`/image/${fileName}`, {
         headers : {
             Authorization: `Bearer ${localStorage.getItem("token")}` 

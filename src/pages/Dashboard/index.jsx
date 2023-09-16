@@ -304,7 +304,7 @@ const index = () => {
                         <Tabs.Item title="Mualliflar">
                             <Table hoverable>
                                 <Table.Head>
-                                    <Table.HeadCell>Rasm</Table.HeadCell>
+                                   
                                     <Table.HeadCell>Muallif</Table.HeadCell>
                                     <Table.HeadCell>Tuguligan sanasi</Table.HeadCell>
                                     <Table.HeadCell>Vafot etgan sanasi</Table.HeadCell>
@@ -317,11 +317,10 @@ const index = () => {
                                     {
                                         authorList.length ? authorList?.map((item) => {
                                             return <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                                <Table.Cell>
-                                                    <img src={`https://literature-18wr.onrender.com/api/image/${item.image}`} alt={item.first_name} className="w-10 h-10 rounded-full" />
-                                                </Table.Cell>
+                                                
                                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                                    {item?.first_name} {item?.last_name}
+                                                    <Avatar src={`https://literature-18wr.onrender.com/api/image/${item.image}`} size="large"/>
+                                                    <span className="ms-3">{item?.first_name} {item?.last_name}</span>
                                                 </Table.Cell>
                                                 <Table.Cell>{item?.date_birth}</Table.Cell>
                                                 <Table.Cell>{item?.date_death}</Table.Cell>
@@ -398,7 +397,7 @@ const index = () => {
 
                                     {
                                         bookList.length ? bookList.map((item) => {
-                                            return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                            return <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                                     <Avatar src={`https://literature-18wr.onrender.com/api/image/${item?.book_cover}`} shape="square" size="large" />
                                                     <span className="ms-2">{item?.title}</span>
