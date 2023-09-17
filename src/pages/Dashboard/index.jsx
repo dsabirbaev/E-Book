@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, useContext } from "react";
 import { Modal, Input, Avatar } from "antd";
 import { Button, Tabs, Table } from "flowbite-react";
 
@@ -13,10 +13,15 @@ import AuthorModal from "./AuthorModal";
 import BookModal from "./BookModal";
 import CategoryModal from "./CategoryModal";
 
+import { langs } from "../../lang/lang";
+import { Localization } from "../../store/store";
 
 const index = () => {
 
     const [authorImage, setAuthorImage] = useState("");
+
+    const { lang } = useContext(Localization);
+    const t = langs[lang];
 
     const initState = {
         modal1: false,
@@ -192,16 +197,16 @@ const index = () => {
             <div className="container">
                 <ToastContainer />
 
-                <AuthorModal modal2={modal2} countryList={countryList} modal={SHOW_MODAL_2} />
+                <AuthorModal t={t} modal2={modal2} countryList={countryList} modal={SHOW_MODAL_2} />
 
-                <BookModal countryList={countryList} categoryList={categoryList} authorList={authorList} modal3={modal3} modal={SHOW_MODAL_3} />
+                <BookModal t={t} countryList={countryList} categoryList={categoryList} authorList={authorList} modal3={modal3} modal={SHOW_MODAL_3} />
 
-                <CategoryModal modal4={modal4} modal={SHOW_MODAL_4} />
+                <CategoryModal t={t} modal4={modal4} modal={SHOW_MODAL_4} />
 
                 <Modal
                     okText="Saqlash"
                     cancelText="Bekor qilish"
-                    title="Davlat qo'shish"
+                    title={t?.addCountry}
                     open={modal1}
                     onOk={() => addNewCountry()}
                     onCancel={() => dispatch({ type: "MODAL1" })}
@@ -241,22 +246,22 @@ const index = () => {
                 <div className="flex justify-between py-8 border-b-2">
                     <div className="text-xl font-sans flex items-center gap-x-4 ">
                         <Link to="/">
-                            <Button gradientDuoTone="purpleToBlue">Bosh sahifa</Button>
+                            <Button gradientDuoTone="purpleToBlue">{t?.home}</Button>
                         </Link>
-                        <span> Umimiy baza</span>
+                        <span> {t?.totalBase}</span>
                     </div>
                     <div className="flex gap-x-2 font-mono">
                         <Button gradientMonochrome="info" onClick={() => dispatch({ type: "MODAL1" })}>
-                            Davlat qo'shish
+                            {t?.addCountry}
                         </Button>
                         <Button gradientMonochrome="purple" onClick={() => dispatch({ type: "MODAL2" })}>
-                            Muallif qo'shish
+                            {t?.addAuthor}
                         </Button>
                         <Button gradientMonochrome="success" onClick={() => dispatch({ type: "MODAL4" })}>
-                            Kategoriya qo'shish
+                            {t?.addCategory}
                         </Button>
                         <Button gradientMonochrome="success" onClick={() => dispatch({ type: "MODAL3" })}>
-                            Kitob qo'shish
+                            {t?.addBook}
                         </Button>
 
                     </div>
@@ -264,7 +269,7 @@ const index = () => {
 
                 <div className="mt-4 font-mono">
                     <Tabs.Group aria-label="Default tabs" style="default">
-                        <Tabs.Item title="Davlatlar">
+                        <Tabs.Item title={t?.countries}>
                             <Table hoverable>
                                 <Table.Head>
                                     <Table.HeadCell>Nomi</Table.HeadCell>
@@ -301,10 +306,10 @@ const index = () => {
                                 </Table.Body>
                             </Table>
                         </Tabs.Item>
-                        <Tabs.Item title="Mualliflar">
+                        <Tabs.Item title={t?.authors}>
                             <Table hoverable>
                                 <Table.Head>
-                                   
+
                                     <Table.HeadCell>Muallif</Table.HeadCell>
                                     <Table.HeadCell>Tuguligan sanasi</Table.HeadCell>
                                     <Table.HeadCell>Vafot etgan sanasi</Table.HeadCell>
@@ -317,9 +322,9 @@ const index = () => {
                                     {
                                         authorList.length ? authorList?.map((item) => {
                                             return <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                                
+
                                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                                    <Avatar src={`https://literature-18wr.onrender.com/api/image/${item.image}`} size="large"/>
+                                                    <Avatar src={`https://literature-18wr.onrender.com/api/image/${item.image}`} size="large" />
                                                     <span className="ms-3">{item?.first_name} {item?.last_name}</span>
                                                 </Table.Cell>
                                                 <Table.Cell>{item?.date_birth}</Table.Cell>
@@ -349,7 +354,7 @@ const index = () => {
                             </Table>
                         </Tabs.Item>
 
-                        <Tabs.Item title="Kategoriya">
+                        <Tabs.Item title={t?.categories}>
                             <Table hoverable>
                                 <Table.Head>
                                     <Table.HeadCell>Nomi</Table.HeadCell>
@@ -382,7 +387,7 @@ const index = () => {
                             </Table>
                         </Tabs.Item>
 
-                        <Tabs.Item title="Kitoblar">
+                        <Tabs.Item title={t?.books}>
                             <Table hoverable>
                                 <Table.Head>
                                     <Table.HeadCell>Nomi</Table.HeadCell>

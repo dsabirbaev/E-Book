@@ -2,12 +2,12 @@
 import CardAuthor from "../UI/Card/Author/CardAuthor";
 import CardBook from "../UI/Card/Book/CardBook";
 
-const Category = () => {
+const Category = ({t}) => {
     return (
         <section className='py-[50px]'>
             <div className='container'>
                 <div className='wrapper'>
-                    <h2 className='text-[#C9AC8C] text-center uppercase text-[31px] font-["Rotter"] mb-5'>Asosiy kategoriyalar</h2>
+                    <h2 className='text-[#C9AC8C] text-center uppercase text-[31px] font-["Rotter"] mb-5'>{t?.mainCategories}</h2>
                     <nav className='mb-10'>
                         <ul className='flex items-center justify-center gap-x-[49px] text-[20px] text-gray-400'>
                             <li className='p-[10px]'>

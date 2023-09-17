@@ -5,7 +5,7 @@ import { Modal, Input, Select } from "antd";
 import { Textarea } from "flowbite-react";
 import useBook from "../../service/book/useBook";
 import useFile from '../../service/fileUpload/useFile';
-const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => {
+const BookModal = ({ modal3, modal, categoryList, countryList, authorList, t}) => {
 
     const initState = {
         title: "",
@@ -44,7 +44,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
         }
     }
 
-    const [{ title, pages, year, price, country_id, author_id, category_id, description, book_cover }, dispatch] = useReducer(reducer, initState);
+    const [{ title, pages, year, price, country_id, author_id, category_id, description, book_cover}, dispatch] = useReducer(reducer, initState);
 
 
     const addBook = () => {
@@ -107,7 +107,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
             <Modal
                 okText="Saqlash"
                 cancelText="Bekor qilish"
-                title="Kitob qushish"
+                title={t?.addBook}
                 open={modal3}
                 onOk={() => addBook()}
                 onCancel={() => modal()}

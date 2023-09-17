@@ -1,13 +1,20 @@
+import { useState, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Dropdown } from 'flowbite-react';
 import { ToastContainer, toast } from 'react-toastify';
-import { useState } from "react";
+import { langs } from "../../lang/lang";
+import { Localization } from "../../store/store";
 import "./style.scss";
 
 const index = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token") || false);
+
     const [userName] = useState((localStorage.getItem("user")));
+    const {lang} = useContext(Localization);
+    const t = langs[lang];
+
+
     const logOut = () => {
 
         if (localStorage.getItem("token")) {
@@ -33,27 +40,27 @@ const index = () => {
                         <ul className="flex items-center gap-x-[23.5px] font-['HelveticaNeueCyrLight'] text-[16px]">
                             <li>
                                 <NavLink to="/">
-                                    Bosh sahifa
+                                    {t?.home}
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/nasr">
-                                    Nasr
+                                    {t?.nasr}
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/nazm">
-                                    Nazm
+                                    {t?.nazm}
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/maqola">
-                                    Maqolalar
+                                    {t?.blogs}
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/forum">
-                                    Forum
+                                    {t?.forum}
                                 </NavLink>
                             </li>
                         </ul>
@@ -65,18 +72,18 @@ const index = () => {
                                     (
                                         <ul>
                                             <li>
-                                                <Link to="/profile" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Profile </Link>
+                                                <Link to="/profile" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> {t?.profile} </Link>
                                             </li>
                                             <li>
-                                                <Link to="/dashboard" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Maydon </Link>
+                                                <Link to="/dashboard" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> {t?.dashboard} </Link>
                                             </li>
                                             <li>
-                                                <Link to="/settings" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> Sozlamalar </Link>
+                                                <Link to="/settings" className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block"> {t?.settings} </Link>
                                             </li>
                                             <li>
                                                 <span onClick={() => logOut()} className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block">
                                                     {
-                                                        isLoggedIn ? "Chiqish" : "Kirish"
+                                                        isLoggedIn ? `${t?.logout}` : "Kirish"
                                                     }
 
                                                 </span>
@@ -89,7 +96,7 @@ const index = () => {
                                             <li>
                                                 <span onClick={() => logOut()} className="p-2 bg-slate-50 rounded-md hover:bg-slate-200 m-1 block">
                                                     {
-                                                        isLoggedIn ? "Chiqish" : "Kirish"
+                                                        isLoggedIn ? `${t?.logout}` : "Kirish"
                                                     }
 
                                                 </span>
