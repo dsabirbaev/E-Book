@@ -24,7 +24,6 @@ const AuthorModal = ({ modal2, countryList, modal, t}) => {
 
 
     const setImage = (value) => {
-        
         dispatch({ type: "SET_IMAGE", payload: value })
     }
 
@@ -75,7 +74,7 @@ const AuthorModal = ({ modal2, countryList, modal, t}) => {
             bio: bio,
             image: image
         }
-
+      
         if (
             newAuthor?.first_name?.length &&
             newAuthor?.last_name?.length &&
