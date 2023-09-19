@@ -1,48 +1,50 @@
 
-
-import { useEffect, useContext } from "react";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 import { Select, Button } from "flowbite-react";
 import { Switch } from "antd";
-import {langs} from "../../lang/lang";
-import {Localization} from "../../store/store";
 
 const Setting = () => {
-    const {lang, setLang} = useContext(Localization);
-    const t = langs[lang];
-    
+
+    const { t } = useTranslation();
+
     const onChange = (checked) => {
         console.log(`switch to ${checked}`);
     };
 
+    const changeLang = (lang) => {
+      i18next.changeLanguage(lang.toLowerCase());
+    }
   
-    useEffect(() => {
-        console.log(langs)
-    }, [])
-
+  
     return (
         <section>
             <div className='container'>
                 <div className="wrapper">
-                    <h1 className='text-2xl my-8'>{t?.settings}</h1>
+                    <h1 className='text-2xl my-8'>
+                        {t("settings")}
+                        
+                    </h1>
 
                     <Select
                         id="countries"
                         required
-                        className="py-4"
-                        onChange={(e) => setLang(e.target.value)}
+                        className="py-4 w-[250px]"
+                        onChange={(e) => changeLang(e.target.value)}
                     >
                         <option> UZ </option>
                         <option> EN </option>
                         <option> RU </option>
                     </Select>
                     <div className="py-3">
-                        <p className="my-2">{t?.theme}:</p>
+                        <p className="my-2">{t("theme")}:</p>
+                       
                         <Switch defaultChecked onChange={onChange} />;
                     </div>
 
                     <div className="flex justify-end">
                         <Button className='bg-slate-500 text-white' htmlType="submit">
-                            {t?.save}
+                           {t("save")}
                         </Button>
                     </div>
 

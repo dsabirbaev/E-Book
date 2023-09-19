@@ -1,16 +1,11 @@
-
-import { useContext, useReducer, useEffect } from 'react';
+import { useTranslation } from "react-i18next";
+import { useReducer, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
-import {langs} from "../../lang/lang";
-import { Localization } from '../../store/store';
-
 import useUser from '../../service/user/userApi';
 
 const Security = () => {
+    const { t } = useTranslation();
     const id = localStorage.getItem("my_id");
-
-    const {lang} = useContext(Localization)
-    const t = langs[lang];
 
     const onFinish = (value) => {
         console.log(value);
@@ -57,35 +52,38 @@ const Security = () => {
                    
 
                     <div className='form grow'>
-                        <h1 className='text-2xl mb-5'>{t?.updateData}</h1>
-
+                        <h1 className='text-2xl mb-5'>
+                            {t("updateData")}
+                        </h1>
                         <Form name="form_item_path" layout="vertical" onFinish={onFinish}>
                             
                             <label htmlFor="email" className='block mb-8'>
-                                <p>Email</p>
-                                <Input value={userData?.email} type="email" className='mb-4 rounded-lg p-4 bg-slate-100 border-none outline-none' placeholder={t?.email} />
+                                <p className="mb-1">{t("email")}:</p>
+                                <Input value={userData?.email} type="email" className='mb-4 rounded-lg p-4 bg-slate-100 border-none outline-none'
+                                 placeholder={t("email")} 
+                                 />
                             </label>
 
                             <label htmlFor="lastname" className='block mb-8'>
-                                <p>{t?.currentPassword}:</p>
+                                <p className="mb-1">{t("currentPassword")}:</p>
                                 <Input type="password" className='mb-4 rounded-lg p-4 bg-slate-100 border-none outline-none' placeholder='***********' />
                             </label>
 
 
                             <div className='flex gap-x-4 w-full mb-8'>
                                 <label htmlFor="tel" className='grow'>
-                                    <p>{t?.newPassword}:</p>
+                                    <p className="mb-1">{t("newPassword")}:</p>
                                     <Input type="password" className='mb-4 rounded-lg p-4 bg-slate-100 border-none outline-none' placeholder='**********' />
                                 </label>
                                 <label htmlFor="email" className='grow'>
-                                    <p>{t?.confirmPassword}:</p>
+                                    <p className="mb-1">{t("confirmPassword")}:</p>
                                     <Input type="password" className='mb-4 rounded-lg p-4 bg-slate-100 border-none outline-none' placeholder='**********' />
                                 </label>
 
                             </div>
 
                             <Button className='bg-slate-500 text-white' htmlType="submit">
-                                {t?.save}
+                               {t("save")}
                             </Button>
                         </Form>
                     </div>

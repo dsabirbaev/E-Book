@@ -5,7 +5,7 @@ import { Modal, Input } from "antd";
 import { Textarea } from "flowbite-react";
 import useBook from "../../service/book/useBook";
 import useFile from '../../service/fileUpload/useFile';
-const BookModal = ({ modal3, modal, categoryList, countryList, authorList, t }) => {
+const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => {
 
     const [btnDisable, btnEnable] = useState(false);
 
@@ -117,7 +117,8 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList, t }) 
             <Modal
                 okText="Saqlash"
                 cancelText="Bekor qilish"
-                title={t?.addBook}
+                // title={t?.addBook}
+                title="Kitob qo'shish"
                 open={modal3}
                 onOk={() => addBook()}
                 onCancel={() => modal()}

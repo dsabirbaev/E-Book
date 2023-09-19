@@ -6,7 +6,7 @@ import { Textarea } from "flowbite-react";
 import useAuthor from "../../service/author/useAuthor";
 
 
-const AuthorModal = ({ modal2, countryList, modal, t}) => {
+const AuthorModal = ({ modal2, countryList, modal}) => {
 
     const [btnDisable, btnEnable] = useState(false);
 
@@ -112,7 +112,8 @@ const AuthorModal = ({ modal2, countryList, modal, t}) => {
             <Modal
                 okText="Saqlash"
                 cancelText="Bekor qilish"
-                title={t?.addAuthor}
+                // title={t?.addAuthor}
+                title="Muallif qo'shish"
                 open={modal2}
                 onOk={() => addAuthor()}
                 onCancel={() => modal()}
