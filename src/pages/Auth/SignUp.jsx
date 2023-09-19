@@ -1,7 +1,7 @@
 
 
-import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, Input } from 'antd';
 
 import img from "../../assets/images/signup.png";
@@ -11,9 +11,7 @@ import InputMask from 'react-input-mask';
 
 const SignUp = () => {
 
-    const [telNumber, setTelNumber] = useState("");
     const navigate = useNavigate();
-
 
     const onFinish = (values) => {
 
@@ -25,9 +23,9 @@ const SignUp = () => {
             password: values.password
         };
 
-        console.log(newUser)
+      
         useAuth.register(newUser).then((res) => {
-            console.log(res)
+        
             if (res.status === 201) {
 
                 toast.success(`${values.firstName}  ro'yhatdan o'tildi!`, {autoClose: 1000});

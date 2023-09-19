@@ -105,7 +105,6 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList, t }) 
         image.append("image", file);
 
         useFile.uploadFile(image).then((res) => {
-
             dispatch({ type: "SET_BOOK_COVER", book_cover: res.data })
         }).catch((err) => {
             console.log(err)

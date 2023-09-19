@@ -56,8 +56,6 @@ const MyAccount = () => {
         getUser();
        
     }, [])
-
-
    
     return (
         <section>

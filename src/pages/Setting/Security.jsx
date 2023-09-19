@@ -1,17 +1,55 @@
 
-import { useContext } from 'react';
+import { useContext, useReducer, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import {langs} from "../../lang/lang";
 import { Localization } from '../../store/store';
 
+import useUser from '../../service/user/userApi';
 
 const Security = () => {
+    const id = localStorage.getItem("my_id");
+
     const {lang} = useContext(Localization)
     const t = langs[lang];
 
     const onFinish = (value) => {
         console.log(value);
     };
+
+    const initState = {
+        userData: []
+    }
+
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case "SET_USER":
+                return { ...state, userData: action.payload };
+            default:
+                return state;
+        }
+    }
+
+    const [{ userData }, dispatch] = useReducer(reducer, initState);
+
+    const getUser = async () => {
+        try {
+            const response = await useUser.getUserItem(id)
+          
+            if (response.status === 200) {
+              
+                dispatch({ type: "SET_USER", payload: response.data })
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+    useEffect(() => {
+        getUser();
+       
+    }, [])
+
     return (
         <section>
             <div className='container'>
@@ -25,7 +63,7 @@ const Security = () => {
                             
                             <label htmlFor="email" className='block mb-8'>
                                 <p>Email</p>
-                                <Input type="email" className='mb-4 rounded-lg p-4 bg-slate-100 border-none outline-none' placeholder={t?.email} />
+                                <Input value={userData?.email} type="email" className='mb-4 rounded-lg p-4 bg-slate-100 border-none outline-none' placeholder={t?.email} />
                             </label>
 
                             <label htmlFor="lastname" className='block mb-8'>

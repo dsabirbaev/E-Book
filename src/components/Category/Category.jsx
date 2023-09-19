@@ -22,7 +22,7 @@ const Category = ({ t }) => {
     const getCategory = async () => {
         try {
             const res = await useCategory.getCategory();
-            console.log(res.data)
+       
             if (res.status === 200) {
                 dispatch({ type: "SET_CATEGORY", payload: res.data })
             }
