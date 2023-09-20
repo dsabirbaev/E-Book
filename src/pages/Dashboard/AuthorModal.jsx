@@ -11,7 +11,7 @@ const AuthorModal = ({ modal2, countryList, modal}) => {
     const [btnDisable, btnEnable] = useState(false);
 
     const onChange = (value) => {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         dispatch({ type: "SET_COUNTRY_ID", payload: value })
     };
 
@@ -64,7 +64,7 @@ const AuthorModal = ({ modal2, countryList, modal}) => {
     const [{ f_name, l_name, b_date, d_date, country_id, bio, image }, dispatch] = useReducer(reducer, intState);
 
     const addAuthor = () => {
-        btnEnable(true)
+       
         const newAuthor = {
             first_name: f_name,
             last_name: l_name,
@@ -74,27 +74,27 @@ const AuthorModal = ({ modal2, countryList, modal}) => {
             bio: bio,
             image: image
         }
-      
+    
         if (
             newAuthor?.first_name?.length &&
             newAuthor?.last_name?.length &&
             newAuthor?.date_birth?.length &&
             newAuthor?.date_death?.length &&
             newAuthor?.country_id?.length &&
-            newAuthor?.bio?.length) {
-
+            newAuthor?.bio?.length && newAuthor?.image?.size > 1) {
+            btnEnable(true)
             useAuthor.createAuthor(newAuthor).then((res) => {
-                
-                toast.success("Muallif qo'shildi!", { autoClose: 1000})
-                btnEnable(false);
-                dispatch({ type: "CLEAR_AUTHOR_INPUT" });
+              
+                if(res.status === 201){
+                    toast.success("Muallif qo'shildi!", { autoClose: 1000})
+                    btnEnable(false);
+                    dispatch({ type: "CLEAR_AUTHOR_INPUT" });
+                  
+                    setTimeout(() => {
+                        modal();
+                    }, 1000)
+                }
                
-                setTimeout(() => {
-                    modal();
-                }, 1000)
-                
-               
-
             }).catch((err) => {
                 console.log(err);
                 toast.error("Xatolik bo'ldi!", { autoClose: 1000})
@@ -112,7 +112,7 @@ const AuthorModal = ({ modal2, countryList, modal}) => {
             <Modal
                 okText="Saqlash"
                 cancelText="Bekor qilish"
-                // title={t?.addAuthor}
+             
                 title="Muallif qo'shish"
                 open={modal2}
                 onOk={() => addAuthor()}

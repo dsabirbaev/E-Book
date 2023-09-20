@@ -2,33 +2,44 @@
 
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { Modal, Input} from "antd";
+import { Modal, Input } from "antd";
 import useCategory from "../../service/category/useCategory";
 
 
-const CategoryModal = ({ modal4, modal}) => {
+const CategoryModal = ({ modal4, modal }) => {
     const [btnDisable, btnEnable] = useState(false);
     const [name, setName] = useState("")
 
     const addCategory = () => {
-        btnEnable(true)
+       
         const object = {
             name: name
         }
-       
-        useCategory.createCategory(object).then((res) => {
+
+        if (object?.name.trim().length) {
+            btnEnable(true)
             
-            toast.success("Kategoriya qo'shildi!", { autoClose: 500})
-            btnEnable(false);
-            
-            setTimeout(() => {
-                modal();
-            }, 500)
-            setName("");
-        }).catch((err) => {
-            console.log(err);
-            toast.error("Xatolik!", { autoClose: 1000})
-        })
+            useCategory.createCategory(object).then((res) => {
+
+                if(res.status === 201){
+                    toast.success("Kategoriya qo'shildi!", { autoClose: 500 })
+                    btnEnable(false);
+    
+                    setTimeout(() => {
+                        modal();
+                    }, 500)
+                    setName("");
+                }
+              
+            }).catch((err) => {
+                console.log(err);
+                toast.error("Xatolik!", { autoClose: 1000 })
+            })
+        }else {
+            toast.warn("Hamma qatorni to'ldiring!", { autoClose: 1000})
+        }
+
+
     }
     return (
         <div>
@@ -45,7 +56,7 @@ const CategoryModal = ({ modal4, modal}) => {
                 okButtonProps={{ disabled: btnDisable }}
             >
                 <div className="flex">
-                    
+
                     <div className="p-5 grow">
                         <Input
                             value={name}
@@ -54,7 +65,7 @@ const CategoryModal = ({ modal4, modal}) => {
                             className=" rounded-lg py-3 mb-3"
                             placeholder="Kategoriya nomi"
                         />
-                        
+
                     </div>
                 </div>
             </Modal>

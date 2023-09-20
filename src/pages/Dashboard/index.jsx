@@ -80,7 +80,7 @@ const index = () => {
     const [{ modal1, modal2, modal3, modal4, countryName, countryIcon, countryList, countryLoad, authorList, authorLoad, categoryList, categoryLoad, bookList, bookLoad }, dispatch] = useReducer(reducer, initState);
 
     const addNewCountry = () => {
-        btnEnable(true);
+       
 
         const newCountry = {
             name: countryName,
@@ -88,13 +88,14 @@ const index = () => {
         }
 
         if (newCountry.name.trim().length === 0 || newCountry.icon.trim().length === 0) {
-            toast.warn("Maydonlarni to'ldiring!");
+            toast.warn("Maydonlarni to'ldiring!", {autoClose: 1000});
         } else {
+            btnEnable(true);
             useCountry.createCountry(newCountry).then((res) => {
 
                 if (res.status === 201) {
                     getCountry();
-                    toast.success("Davlat qo'shildi!");
+                    toast.success("Davlat qo'shildi!", { autoClose: 1000});
                     dispatch({ type: "MODAL1" });
                     dispatch({ type: "CLEAR_COUNTRY_INPUT" });
                     btnEnable(false);
@@ -326,7 +327,7 @@ const index = () => {
                                                 <Table.Cell>{item?.date_birth}</Table.Cell>
                                                 <Table.Cell>{item?.date_death}</Table.Cell>
                                                 <Table.Cell>{item?.country?.name}</Table.Cell>
-                                                <Table.Cell>{item?.bio}</Table.Cell>
+                                                <Table.Cell>{item?.bio.slice(0, 50)} ...</Table.Cell>
 
                                                 <Table.Cell>
                                                     <Button onClick={() => deleteAuthor(item?.id)} gradientMonochrome="failure">O'chirish </Button>

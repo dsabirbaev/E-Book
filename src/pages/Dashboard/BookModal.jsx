@@ -54,7 +54,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
 
 
     const addBook = () => {
-        btnEnable(true)
+        
         const newBook = {
             title,
             pages,
@@ -66,7 +66,7 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
             description,
             book_cover
         }
-
+        console.log(book_cover)
         if (
             newBook?.title?.length &&
             newBook?.pages?.length &&
@@ -75,21 +75,23 @@ const BookModal = ({ modal3, modal, categoryList, countryList, authorList }) => 
             newBook?.country_id?.length &&
             newBook?.author_id?.length &&
             newBook?.category_id?.length &&
-            newBook?.description?.length
+            newBook?.description?.length && newBook?.book_cover?.length
         ) {
             newBook.country_id = Number(newBook.country_id);
             newBook.category_id = Number(newBook.category_id);
             newBook.author_id = Number(newBook.author_id);
-
+            btnEnable(true)
             useBook.createBook(newBook).then((res) => {
 
-                toast.success("Kitob qo'shildi!", { autoClose: 1000 })
-                btnEnable(false);
-                dispatch({ type: "CLEAR_BOOK_INPUT" });
-
-                setTimeout(() => {
-                    modal();
-                }, 1000)
+                if(res.status === 201){
+                    toast.success("Kitob qo'shildi!", { autoClose: 1000 })
+                    btnEnable(false);
+                    dispatch({ type: "CLEAR_BOOK_INPUT" });
+                    setTimeout(() => {
+                        modal();
+                    }, 500)
+                }
+              
             }).catch((err) => {
 
                 toast.error("Error!", { autoClose: 1000 })
